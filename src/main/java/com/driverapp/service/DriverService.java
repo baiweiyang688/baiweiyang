@@ -1,8 +1,8 @@
-package com.driverApp.service;
+package com.driverapp.service;
 
-import com.driverApp.dao.DriverDao;
-import com.driverApp.entity.DriverMesInfo;
-import com.driverApp.entity.StoreMesInfo;
+import com.driverapp.dao.DriverDao;
+import com.driverapp.entity.DriverMesInfo;
+import com.driverapp.entity.StoreMesInfo;
 import org.springframework.stereotype.Service;
 import util.AppResponse;
 

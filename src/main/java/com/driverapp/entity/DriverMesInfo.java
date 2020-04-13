@@ -1,4 +1,4 @@
-package com.driverApp.entity;
+package com.driverapp.entity;
 
 public class DriverMesInfo {
     /**

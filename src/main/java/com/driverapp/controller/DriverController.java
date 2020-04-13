@@ -1,6 +1,6 @@
-package com.driverApp.controller;
+package com.driverapp.controller;
 
-import com.driverApp.service.DriverService;
+import com.driverapp.service.DriverService;
 import com.user.controller.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

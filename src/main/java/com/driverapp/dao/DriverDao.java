@@ -1,7 +1,7 @@
-package com.driverApp.dao;
+package com.driverapp.dao;
 
-import com.driverApp.entity.DriverMesInfo;
-import com.driverApp.entity.StoreMesInfo;
+import com.driverapp.entity.DriverMesInfo;
+import com.driverapp.entity.StoreMesInfo;
 import org.apache.ibatis.annotations.Param;
 
 /**
