@@ -1,12 +1,9 @@
-package com.driver.dao;
+package com.driverApp.dao;
 
-import com.driver.entity.DriverMesInfo;
-import com.driver.entity.StoreMesInfo;
-import com.user.entity.UserInfo;
-import com.viewpage.entity.ViewPageInfo;
+import com.driverApp.entity.DriverMesInfo;
+import com.driverApp.entity.StoreMesInfo;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
 /**
  * @ClassName DriverDao
  * @Description 司机

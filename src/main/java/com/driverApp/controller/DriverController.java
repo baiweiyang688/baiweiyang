@@ -1,8 +1,7 @@
-package com.driver.controller;
+package com.driverApp.controller;
 
-import com.driver.service.DriverService;
+import com.driverApp.service.DriverService;
 import com.user.controller.UserController;
-import com.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +11,7 @@ import util.AppResponse;
 import javax.annotation.Resource;
 
 /**
- * @Description pc端的
+ * @Description app端的
  * @Author 张鑫
  * @Date 2020-3-25
  */

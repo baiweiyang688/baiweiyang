@@ -1,4 +1,4 @@
-package com.driver.entity;
+package com.driverApp.entity;
 
 public class StoreMesInfo {
     /**

@@ -1,11 +1,8 @@
-package com.driver.service;
+package com.driverApp.service;
 
-import com.driver.dao.DriverDao;
-import com.driver.entity.DriverMesInfo;
-import com.driver.entity.StoreMesInfo;
-import com.user.entity.UserInfo;
-import com.viewpage.dao.ViewPageDao;
-import org.reflections.Store;
+import com.driverApp.dao.DriverDao;
+import com.driverApp.entity.DriverMesInfo;
+import com.driverApp.entity.StoreMesInfo;
 import org.springframework.stereotype.Service;
 import util.AppResponse;
 
@@ -49,7 +46,5 @@ public class DriverService {
         return AppResponse.success("查询成功！",storeInviteCode);
     }
 
-
-    char charr[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".toCharArray();
 
 }
