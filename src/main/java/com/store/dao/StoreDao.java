@@ -10,7 +10,7 @@ import java.util.List;
 public interface StoreDao {
     /**
      * 新增门店
-     * @param storeInfo 门店信息
+     * @param storeInfo
      * @return
      */
     int addStore(StoreInfo storeInfo);

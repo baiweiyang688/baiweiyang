@@ -44,6 +44,10 @@ public class GoodsService {
 
     /**
      * 新增商品
+     * @param goodsInfo
+     * @return
+     * @Author 张鑫
+     * @Date 2020-3-26
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addGoods(GoodsInfo goodsInfo) {
@@ -73,7 +77,6 @@ public class GoodsService {
 
     /**
      * 查询商品详情
-     *
      * @param goodsCode
      * @return
      * @Author 张鑫
