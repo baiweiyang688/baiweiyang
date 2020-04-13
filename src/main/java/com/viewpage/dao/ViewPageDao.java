@@ -61,4 +61,5 @@ public interface ViewPageDao {
      * @return 修改结果
      */
     GoodsViewPageInfo findGoods(@Param("goodsName") String goodsName,@Param("goodsCode") String goodsCode);
+
 }

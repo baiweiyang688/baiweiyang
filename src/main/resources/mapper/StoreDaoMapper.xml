@@ -1,7 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.driver.dao.DriverDao">
+<mapper namespace="com.store.dao.StoreDao">
+    <!--统计用户账号数量-->
+    <select id="countStoreAcct" parameterType="com.store.entity.StoreInfo"
+            resultType="int">
+        select count(store_acct)
+        from t_store
+        where is_deleted = 0
+        and store_acct = #{storeAcct}
+        <if test="storeCode != null and storeCode != ''">
+            and store_code != #{storeCode}
+        </if>
 
+    </select>
 
+    <!--新增门店-->
+    <insert id="addStore" parameterType="com.store.entity.StoreInfo">
+        insert into t_store
+        (store_code,
+         store_acct,
+         store_name,
+         store_phone,
+         boss_code,
+         store_licence,
+         privince_id,
+         city_id,
+         district_id,
+         store_address,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{storeCode},
+            #{storeAcct},
+            #{storeName},
+            #{storePhone},
+            #{bossCode},
+            #{storeLicence},
+            #{privinceId},
+            #{cityId},
+            #{districtId},
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
 </mapper>

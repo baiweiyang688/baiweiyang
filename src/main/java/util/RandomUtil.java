@@ -32,7 +32,7 @@ public class RandomUtil {
 	}
 
 	/**
-	 * 司机随机编码
+	 * 司机随机编码 4位字母加三位数字
 	 * @return
 	 */
 	public static String randomDriverCode(){

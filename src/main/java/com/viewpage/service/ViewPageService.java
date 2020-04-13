@@ -50,7 +50,7 @@ public class ViewPageService {
      * 启用、禁用轮播图
      * @param viewPageInfo
      * @return
-     * @Author baiweiyang
+     * @Author 张鑫
      * @Date 2020-03-26
      */
     @Transactional(rollbackFor = Exception.class)
