@@ -76,7 +76,7 @@ public class GoodsService {
      *
      * @param goodsCode
      * @return
-     * @Author baiweiyang
+     * @Author 张鑫
      * @Date 2020-3-26
      */
     public AppResponse findGoods(String goodsCode) {
@@ -112,8 +112,7 @@ public class GoodsService {
     }
 
     /**
-     * demo 修改商品信息
-     *
+     * 修改商品信息
      * @param goodsInfo
      * @return
      * @Author 张鑫

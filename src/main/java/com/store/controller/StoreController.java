@@ -117,7 +117,7 @@ public class StoreController {
     }
 
     /**
-     * 删除门店信息
+     * 删除门店
      * @param storeCode
      * @return AppResponse
      * @author 张鑫
