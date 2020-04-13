@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  */
 
 @RestController
-@RequestMapping("/driver")
+@RequestMapping("/driverapp")
 public class DriverController {
     public static final Logger logger =
             LoggerFactory.getLogger(UserController.class);
