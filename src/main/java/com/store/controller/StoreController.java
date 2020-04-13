@@ -1,11 +1,13 @@
 package com.store.controller;
 
 
+import com.goods.entity.GoodsInfo;
 import com.store.entity.StoreInfo;
 import com.store.service.StoreService;
 import com.viewpage.controller.ViewPageController;
 import com.viewpage.entity.ViewPageInfo;
 import com.viewpage.service.ViewPageService;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -50,6 +52,84 @@ public class StoreController {
             return appResponse;
         } catch (Exception e) {
             logger.error("门店新增失败", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+
+    /**
+     *查询门店详情
+     * @param storeCode
+     * @return AppResponse
+     * @author 张鑫
+     * @Date 2020-3-26
+     */
+    @RequestMapping(value = "findStore")
+    public AppResponse findGoods(String storeCode) {
+        try {
+            return storeService.findStore(storeCode);
+        } catch (Exception e) {
+            logger.error("商品查询错误", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 查询门店列表
+     * @param storeInfo
+     * @return AppResponse
+     * @Author 张鑫
+     * @Date 2020-3-26
+     */
+    @RequestMapping(value = "listStore")
+    public AppResponse listStore(StoreInfo storeInfo) {
+        try {
+            return storeService.listStore(storeInfo);
+        } catch (Exception e) {
+            logger.error("查询门店列表异常", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 修改门店信息
+     * @param storeInfo
+     * @return AppResponse
+     * @author 张鑫
+     * @Date 2020-3-26
+     */
+    @PostMapping("updateStore")
+    public AppResponse updateGoods(StoreInfo storeInfo){
+        try {
+            //获取修改者id
+            String userCode = AuthUtils.getCurrentUserId();
+            storeInfo.setCreateBy(userCode);
+            storeInfo.setLastModifiedBy(userCode);
+            return storeService.updateStore(storeInfo);
+        }catch (Exception e){
+            logger.error("修改门店信息失败",e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 删除门店信息
+     * @param storeCode
+     * @return AppResponse
+     * @author 张鑫
+     * @Date 2020-3-26
+     */
+    @PostMapping("deleteStore")
+    public AppResponse deleteStore(String storeCode){
+        try {
+            String userId = AuthUtils.getCurrentUserId();
+            return storeService.deleteStore(storeCode,userId);
+        }catch (Exception e){
+            logger.error("删除商品错误",e);
             System.out.println(e.toString());
             throw e;
         }

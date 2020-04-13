@@ -4,6 +4,18 @@ import java.util.Date;
 
 public class StoreInfo {
     /**
+     * 页码
+     */
+    private int pageSize;
+    /**
+     * 页数
+     */
+    private int pageNum;
+    /**
+     * 门店邀请码
+     */
+    private String storeInviteCode;
+    /**
      * 门店账号
      */
     private String storeAcct;
@@ -24,9 +36,13 @@ public class StoreInfo {
      */
     private String bossCode;
     /**
+     * 店长名字
+     */
+    private String bossName;
+    /**
      * 营业执照编码
      */
-    private String licenseCode;
+    private String storeLicence;
     /**
      * 省份id
      */
@@ -68,6 +84,22 @@ public class StoreInfo {
      */
     private int version;
 
+    public String getStoreAcct() {
+        return storeAcct;
+    }
+
+    public void setStoreAcct(String storeAcct) {
+        this.storeAcct = storeAcct;
+    }
+
+    public String getStoreCode() {
+        return storeCode;
+    }
+
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
+    }
+
     public String getStoreName() {
         return storeName;
     }
@@ -92,12 +124,12 @@ public class StoreInfo {
         this.bossCode = bossCode;
     }
 
-    public String getLicenseCode() {
-        return licenseCode;
+    public String getStoreLicence() {
+        return storeLicence;
     }
 
-    public void setLicenseCode(String licenseCode) {
-        this.licenseCode = licenseCode;
+    public void setStoreLicence(String storeLicence) {
+        this.storeLicence = storeLicence;
     }
 
     public String getProvinceId() {
@@ -180,19 +212,35 @@ public class StoreInfo {
         this.version = version;
     }
 
-    public String getStoreCode() {
-        return storeCode;
+    public String getStoreInviteCode() {
+        return storeInviteCode;
     }
 
-    public void setStoreCode(String storeCode) {
-        this.storeCode = storeCode;
+    public void setStoreInviteCode(String storeInviteCode) {
+        this.storeInviteCode = storeInviteCode;
     }
 
-    public String getStoreAcct() {
-        return storeAcct;
+    public int getPageSize() {
+        return pageSize;
     }
 
-    public void setStoreAcct(String storeAcct) {
-        this.storeAcct = storeAcct;
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public String getBossName() {
+        return bossName;
+    }
+
+    public void setBossName(String bossName) {
+        this.bossName = bossName;
     }
 }
