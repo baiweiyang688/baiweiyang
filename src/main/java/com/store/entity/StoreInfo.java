@@ -4,6 +4,14 @@ import java.util.Date;
 
 public class StoreInfo {
     /**
+     * 门店账号
+     */
+    private String storeAcct;
+    /**
+     * 门店编号
+     */
+    private String storeCode;
+    /**
      * 门店名称
      */
     private String storeName;
@@ -170,5 +178,21 @@ public class StoreInfo {
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    public String getStoreCode() {
+        return storeCode;
+    }
+
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
+    }
+
+    public String getStoreAcct() {
+        return storeAcct;
+    }
+
+    public void setStoreAcct(String storeAcct) {
+        this.storeAcct = storeAcct;
     }
 }
