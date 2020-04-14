@@ -75,7 +75,7 @@
         <if test="viewPageState != null and viewPageState != ''">
             and a.viewpage_state = #{viewPageState}
         </if>
-        order by a.create_user desc
+        order by a.viewpage_num desc
     </select>
 
     <!--删除轮播图-->
