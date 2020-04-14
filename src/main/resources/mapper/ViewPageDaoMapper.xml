@@ -102,6 +102,7 @@
         a.two_level_name twoLevelName
         from t_goods a
         where a.is_deleted = 0
+        and a.goods_state = 0
         <if test="goodsName != null and goodsName != ''">
             and a.goods_name like concat('%', #{goodsName}, '%')
         </if>
