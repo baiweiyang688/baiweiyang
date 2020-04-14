@@ -32,7 +32,6 @@ public class UserController {
 
     /**
      * 新增用户
-     *
      * @param userInfo
      * @Author baiweiyang
      * @Date 2020-3-25
@@ -54,7 +53,6 @@ public class UserController {
 
     /**
      * 用户列表
-     *
      * @param userInfo
      * @return AppResponse
      * @Author baiweiyang
@@ -112,7 +110,7 @@ public class UserController {
 
     /**
      *删除用户
-     * @param userInfo
+     * @param userCode
      * @return AppResponse
      * @author baiweiyang
      * @Date 2020-3-26

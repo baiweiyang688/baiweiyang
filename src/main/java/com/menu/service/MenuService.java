@@ -20,7 +20,11 @@ import util.StringUtil;
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
-
+/**
+ * @Description 菜单实现功能类
+ * @Author 张鑫
+ * @Date 2020-03-25
+ */
 @Service
 public class MenuService {
 

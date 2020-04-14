@@ -9,7 +9,7 @@ import util.AppResponse;
 import javax.annotation.Resource;
 
 /**
- * @Description 实现功能类
+ * @Description 司机功能类
  * @Author 张鑫
  * @Date 2020-03-27
  */
