@@ -1,7 +1,9 @@
 package com.goods.controller;
 
+import com.goods.entity.GoodsCate;
 import com.goods.entity.GoodsInfo;
 import com.goods.service.GoodsService;
+import com.goodscate.entity.GoodsCateList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,10 +32,9 @@ public class GoodsController {
     /**
      * 新增商品
      * @param goodsInfo
-     * @Author baiweiyang
+     * @Author 张鑫
      * @Date 2020-3-25
      */
-
     @PostMapping("addGoods")
     public AppResponse addGoods(GoodsInfo goodsInfo) {
         try {
@@ -52,7 +53,7 @@ public class GoodsController {
      *查询商品详情
      * @param goodsCode
      * @return AppResponse
-     * @author baiweiyang
+     * @author 张鑫
      * @Date 2020-3-26
      */
     @RequestMapping(value = "findGoods")
@@ -71,7 +72,7 @@ public class GoodsController {
      *
      * @param goodsInfo
      * @return AppResponse
-     * @Author baiweiyang
+     * @Author 张鑫
      * @Date 2020-3-26
      */
     @RequestMapping(value = "listGoods")
@@ -89,7 +90,7 @@ public class GoodsController {
      * 修改商品信息
      * @param goodsInfo
      * @return AppResponse
-     * @author baiweiyang
+     * @author 张鑫
      * @Date 2020-3-26
      */
     @PostMapping("updateGoods")
@@ -111,7 +112,7 @@ public class GoodsController {
      * 删除商品信息
      * @param goodsCode
      * @return AppResponse
-     * @author baiweiyang
+     * @author 张鑫
      * @Date 2020-3-26
      */
     @PostMapping("deleteGoods")
@@ -126,6 +127,60 @@ public class GoodsController {
         }
     }
 
+    /**
+     * 查询一级分类下拉
+     * @param goodsCate
+     * @return AppResponse
+     * @Author 张鑫
+     * @Date 2020-3-26
+     */
+    @RequestMapping(value = "oneLevel")
+    public AppResponse oneLevel(GoodsCate goodsCate) {
+        try {
+            return goodsService.oneLevel(goodsCate);
+        } catch (Exception e) {
+            logger.error("查询分类列表异常", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 
+    /**
+     * 查询二级分类下拉
+     * @param goodsCate
+     * @return AppResponse
+     * @Author 张鑫
+     * @Date 2020-3-26
+     */
+    @RequestMapping(value = "twoLevel")
+    public AppResponse twoLevel(GoodsCate goodsCate) {
+        try {
+            return goodsService.twoLevel(goodsCate);
+        } catch (Exception e) {
+            logger.error("查询分类列表异常", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 
+    /**
+     * 修改商品状态
+     * @param goodsState
+     * @return AppResponse
+     * @Author 张鑫
+     * @Date 2020-3-26
+     */
+    @PostMapping("updateGoodsState")
+    public AppResponse updateGoodsStatus(String goodsCode,String goodsState) {
+        try {
+            //获取用户id
+            String userId = "546";
+            AppResponse appResponse = goodsService.updateGoodsState(goodsCode,userId,goodsState);
+            return appResponse;
+        } catch (Exception e) {
+            logger.error("商品状态修改失败", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 }

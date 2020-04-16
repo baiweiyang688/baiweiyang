@@ -20,7 +20,7 @@ public class ViewPageInfo {
      */
     private String viewPageCode;
     /**
-     * 轮播图状态 0 全部 1 启用 2 禁用
+     * 轮播图状态 0 禁用 1 启用 2 全部
      */
     private int viewPageState;
     /**

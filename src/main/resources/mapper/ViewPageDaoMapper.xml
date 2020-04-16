@@ -40,10 +40,12 @@
         set
          viewpage_state = #{viewPageState},
          update_time = now(),
-         last_modified_by  = #{lastModifiedBy},
+         last_modified_by  = #{userCode},
          version = version + 1
-         where viewpage_code = #{viewPageCode}
-         and version = #{version}
+        where viewpage_code in
+        <foreach item="viewPageCode" index="index" collection="listViewPage" open="(" separator="," close=")">
+            #{viewPageCode}
+        </foreach>
     </update>
 
     <!--获取轮播图状态-->

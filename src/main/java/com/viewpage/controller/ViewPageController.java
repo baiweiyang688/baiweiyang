@@ -57,19 +57,17 @@ public class ViewPageController {
 
     /**
      * 启用、禁用录播图
-     * @param viewPageInfo
+     * @param viewPageCode
      * @return AppResponse
      * @author baiweiyang
      * @Date 2020-3-26
      */
     @PostMapping("updateViewPageState")
-    public AppResponse updateViewPageState(ViewPageInfo viewPageInfo){
+    public AppResponse updateViewPageState(String viewPageCode,String viewPageState){
         try {
             //获取修改者id
             String userCode = AuthUtils.getCurrentUserId();
-            viewPageInfo.setCreateBy(userCode);
-            viewPageInfo.setLastModifiedBy(userCode);
-            return viewPageService.updateViewPageState(viewPageInfo);
+            return viewPageService.updateViewPageState(viewPageCode,userCode,viewPageState);
         }catch (Exception e){
             logger.error("修改轮播图状态失败",e);
             System.out.println(e.toString());

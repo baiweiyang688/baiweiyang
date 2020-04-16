@@ -1,8 +1,10 @@
 package com.goods.dao;
 
 
+import com.goods.entity.GoodsCate;
 import com.goods.entity.GoodsInfo;
 import com.goods.entity.MqInfo;
+import com.user.entity.UserInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -35,7 +37,7 @@ public interface GoodsDao {
     /**
      * 获取所有商品信息
      * @param goodsInfo 商品信息
-     * @return 所有用户信息
+     * @return
      */
     List<GoodsInfo> listGoods(GoodsInfo goodsInfo);
 
@@ -61,7 +63,27 @@ public interface GoodsDao {
      */
     int deleteGoods(List<String> listCode,@Param("userId") String userId);
 
+    /**
+     * 获取商品一级分类
+     * @param goodsCate
+     * @return
+     */
+    List<GoodsCate> oneLevel(GoodsCate goodsCate);
 
+    /**
+     * 获取商品二级分类
+     * @param goodsCate
+     * @return
+     */
+    List<GoodsCate> twoLevel(GoodsCate goodsCate);
+
+    /**
+     * 修改商品状态
+     * @param goodsState
+     * @param userId
+     * @return 修改结果
+     */
+    int updateGoodsState(List<String> listCode,@Param("userId") String userId,@Param("goodsState") String goodsState);
 
 
 

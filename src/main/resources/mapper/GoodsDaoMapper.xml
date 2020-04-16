@@ -192,4 +192,40 @@
     </foreach>
     </update>
 
+    <!--一级分类-->
+    <select id="oneLevel" parameterType="com.goods.entity.GoodsCate" resultType="com.goods.entity.GoodsCate">
+        select
+            cate_code cateCode,
+            cate_name cateName
+        from t_goods_cate
+        where is_deleted=0
+        and  is_parent=0
+    </select>
+
+    <!--二级分类-->
+    <select id="twoLevel" parameterType="com.goods.entity.GoodsCate" resultType="com.goods.entity.GoodsCate">
+        select
+            cate_code cateCode,
+            cate_name cateName
+        from t_goods_cate
+        where is_deleted=0
+        and  is_parent=1
+        and  cate_parent_code = #{cateCode}
+    </select>
+
+    <!--修改商品状态-->
+    <update id="updateGoodsState" parameterType="com.goods.entity.GoodsInfo">
+        update t_goods
+        set
+        goods_state = #{goodsState},
+        update_time    = now(),
+        last_modified_by   = #{userId},
+        version        = version+1
+        where goods_code in
+        <foreach item="goodsCode" index="index" collection="listCode" open="(" separator="," close=")">
+            #{goodsCode}
+        </foreach>
+    </update>
+
+
 </mapper>

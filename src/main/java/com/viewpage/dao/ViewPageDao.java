@@ -19,11 +19,12 @@ public interface ViewPageDao {
     int addViewPage(ViewPageInfo viewPageInfo);
 
     /**
-     * 启用、禁用轮播图
-     * @param viewPageInfo
+     * 修改轮播图状态
+     * @param userId
+     * @param viewPageState
      * @return
      */
-    int updateViewPageState(ViewPageInfo viewPageInfo);
+    int updateViewPageState(List<String> listCode,@Param("userId") String userId,@Param("viewPageState") String viewPageState);
 
     /**
      * 获取轮播图状态
@@ -61,5 +62,7 @@ public interface ViewPageDao {
      * @return 修改结果
      */
     GoodsViewPageInfo findGoods(@Param("goodsName") String goodsName,@Param("goodsCode") String goodsCode);
+
+
 
 }

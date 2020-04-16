@@ -77,7 +77,7 @@
         and version = #{version}
     </update>
 
-    <!--删除门店-->
+    <!--删除菜单-->
     <update id="deleteMenu" parameterType="com.menu.entity.MenuInfo">
         update t_menu
         set

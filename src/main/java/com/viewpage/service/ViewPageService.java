@@ -48,30 +48,22 @@ public class ViewPageService {
 
     /**
      * 启用、禁用轮播图
-     * @param viewPageInfo
+     * @param viewPageState
      * @return
      * @Author 张鑫
      * @Date 2020-03-26
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse updateViewPageState(ViewPageInfo viewPageInfo) {
+    public AppResponse updateViewPageState(String viewPageCode,String userId,String viewPageState) {
+        List<String> listCode = Arrays.asList(viewPageCode.split(","));
         AppResponse appResponse = AppResponse.success("修改成功");
-        List<ViewPageInfo> state = viewPageDao.getViewPageState(viewPageInfo);
-        String json = JSON.toJSONString(state);
-        String a = json.substring(json.lastIndexOf(":")+1,json.indexOf("}"));
-        int nowstate = Integer.parseInt(a);
-        System.out.println(nowstate);
-        if(nowstate == 0 || nowstate == 2){
-            viewPageInfo.setViewPageState(1);
-        }else if(nowstate == 1){
-            viewPageInfo.setViewPageState(2);
-        }
-        int count = viewPageDao.updateViewPageState(viewPageInfo);
+        int count = viewPageDao.updateViewPageState(listCode,userId,viewPageState);
         if (0 == count) {
             return AppResponse.success("数据有变化，请刷新！");
         }
         return appResponse;
     }
+
 
     /**
      * demo 查询轮播图（分页）
@@ -135,6 +127,25 @@ public class ViewPageService {
         return AppResponse.success("查询成功！", goodsViewPageInfo);
     }
 
+//    @Transactional(rollbackFor = Exception.class)
+//    public AppResponse updateViewPageState(ViewPageInfo viewPageInfo) {
+//        AppResponse appResponse = AppResponse.success("修改成功");
+//        List<ViewPageInfo> state = viewPageDao.getViewPageState(viewPageInfo);
+//        String json = JSON.toJSONString(state);
+//        String a = json.substring(json.lastIndexOf(":")+1,json.indexOf("}"));
+//        int nowstate = Integer.parseInt(a);
+//        System.out.println(nowstate);
+//        if(nowstate == 0 || nowstate == 2){
+//            viewPageInfo.setViewPageState(1);
+//        }else if(nowstate == 1){
+//            viewPageInfo.setViewPageState(2);
+//        }
+//        int count = viewPageDao.updateViewPageState(viewPageInfo);
+//        if (0 == count) {
+//            return AppResponse.success("数据有变化，请刷新！");
+//        }
+//        return appResponse;
+//    }
 
 
 
