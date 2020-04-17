@@ -42,7 +42,7 @@
     <select id="findMenu" parameterType="com.menu.entity.MenuMesInfo" resultType="com.menu.entity.MenuMesInfo">
         select
         a.menu_name menuName,
-        a.is_menu isMenu,
+        a.menu_path menuPath,
         a.comment comment
         from t_menu a
         where a.menu_code = #{menuCode}
@@ -64,12 +64,8 @@
         set
          menu_name = #{menuName},
          is_menu = #{isMenu},
-        <if test="menuPath != null and menuPath != ''">
-            menu_path = #{menuPath},
-        </if>
-        <if test="comment != null and comment != ''">
-            comment = #{comment},
-        </if>
+         menu_path = #{menuPath},
+         comment = #{comment},
          update_time = now(),
          last_modified_by  = #{lastModifiedBy},
          version = version + 1

@@ -24,7 +24,7 @@ public interface ViewPageDao {
      * @param viewPageState
      * @return
      */
-    int updateViewPageState(List<String> listCode,@Param("userId") String userId,@Param("viewPageState") String viewPageState);
+    int updateViewPageState(@Param("listCode") List<String> listCode,@Param("userId") String userId,@Param("viewPageState") String viewPageState);
 
     /**
      * 获取轮播图状态

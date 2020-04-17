@@ -66,7 +66,7 @@ public class ViewPageController {
     public AppResponse updateViewPageState(String viewPageCode,String viewPageState){
         try {
             //获取修改者id
-            String userCode = AuthUtils.getCurrentUserId();
+            String userCode = "51654644";
             return viewPageService.updateViewPageState(viewPageCode,userCode,viewPageState);
         }catch (Exception e){
             logger.error("修改轮播图状态失败",e);

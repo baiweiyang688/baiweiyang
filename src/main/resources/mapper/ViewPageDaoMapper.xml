@@ -38,12 +38,12 @@
     <update id="updateViewPageState" parameterType="com.viewpage.entity.ViewPageInfo">
         update t_viewpage
         set
-         viewpage_state = #{viewPageState},
-         update_time = now(),
-         last_modified_by  = #{userCode},
-         version = version + 1
+        viewpage_state = #{viewPageState},
+        update_time = now(),
+        last_modified_by  = #{userId},
+        version = version + 1
         where viewpage_code in
-        <foreach item="viewPageCode" index="index" collection="listViewPage" open="(" separator="," close=")">
+        <foreach item="viewPageCode" index="index" collection="listCode" open="(" separator="," close=")">
             #{viewPageCode}
         </foreach>
     </update>

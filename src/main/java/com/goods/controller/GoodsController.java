@@ -69,7 +69,6 @@ public class GoodsController {
 
     /**
      * 查询商品列表
-     *
      * @param goodsInfo
      * @return AppResponse
      * @Author 张鑫
@@ -174,7 +173,7 @@ public class GoodsController {
     public AppResponse updateGoodsStatus(String goodsCode,String goodsState) {
         try {
             //获取用户id
-            String userId = "546";
+            String userId = AuthUtils.getCurrentUserId();
             AppResponse appResponse = goodsService.updateGoodsState(goodsCode,userId,goodsState);
             return appResponse;
         } catch (Exception e) {

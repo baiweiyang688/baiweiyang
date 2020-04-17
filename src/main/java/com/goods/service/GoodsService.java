@@ -140,7 +140,6 @@ public class GoodsService {
 
     /**
      * demo 删除商品信息
-     *
      * @param goodsCode
      * @return
      * @Author 张鑫
