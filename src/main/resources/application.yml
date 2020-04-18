@@ -23,4 +23,11 @@ spring:
 
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
-
+server:
+  port: 8081
+tengxun:
+  accessKey: AKIDkGWjuoQoumRovItDl46rSJM8d1OU3r86
+  secretKey: pNhMkriNnwqTN1OUM8cqnUw734KMIID1
+  area: ap-chengdu
+  bucketName: xzsd-1300208869
+  path: https://xzsd-1300208869.cos.ap-chengdu.myqcloud.com

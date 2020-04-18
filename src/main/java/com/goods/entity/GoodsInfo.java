@@ -32,7 +32,7 @@ public class GoodsInfo {
      */
     private int goodsSales;
     /**
-     * 商品状态 0 在售 1 已下架 2 未发布
+     * 商品状态 1 在售 2 已下架 3 未发布
      */
     private String goodsState;
     /**
@@ -107,7 +107,7 @@ public class GoodsInfo {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private String createTime;
     /**
      * 创建者
      */
@@ -115,7 +115,7 @@ public class GoodsInfo {
     /**
      * 更新时间
      */
-    private Date updateTime;
+    private String updateTime;
     /**
      * 更新者
      */
@@ -317,11 +317,11 @@ public class GoodsInfo {
         this.isDeleted = isDeleted;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -333,11 +333,11 @@ public class GoodsInfo {
         this.createBy = createBy;
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

@@ -67,8 +67,8 @@
         a.goods_code goodsCode,
         a.goods_name goodsName,
         a.isbn_book_num isbnBookNum,
-        a.one_level_name oneLevelName,
-        a.two_level_name twoLevelName,
+        b.cate_name oneLevelName,
+        c.cate_name twoLevelName,
         a.ad_word adWord,
         a.goods_introduce goodsIntruduce,
         a.boss_name bossName,
@@ -89,9 +89,13 @@
         a.update_time,
         a.last_modified_by,
         a.version
-        from t_goods a
+        from t_goods a,
+        t_goods_cate b,
+        t_goods_cate c
         where a.goods_code = #{goodsCode}
         and is_deleted = 0
+        and a.one_level_code = b.cate_code
+        and a.two_level_code = c.cate_code
     </select>
 
     <!--商品列表-->
@@ -100,12 +104,12 @@
         a.goods_code goodsCode,
         a.goods_name goodsName,
         a.isbn_book_num isbnBookNum,
-        a.one_level_name oneLevelName,
-        a.two_level_name twoLevelName,
+        b.cate_name oneLevelName,
+        c.cate_name twoLevelName,
         a.ad_word adWord,
         a.goods_introduce goodsIntruduce,
         a.boss_name bossName,
-        a.inventory Inventory,
+        a.inventory inventory,
         a.cost_price costPrice,
         a.now_price nowPrice,
         a.goods_image goodsImage,
@@ -119,8 +123,12 @@
         a.update_time,
         a.last_modified_by,
         a.version
-        from t_goods a
+        from t_goods a,
+        t_goods_cate b,
+        t_goods_cate c
         where a.is_deleted = 0
+        and a.one_level_code = b.cate_code
+        and a.two_level_code = c.cate_code
         <if test="goodsName != null and goodsName != ''">
             and a.goods_name like concat('%', #{goodsName}, '%')
         </if>
@@ -159,8 +167,8 @@
         set
          goods_name = #{goodsName},
          isbn_book_num = #{isbnBookNum},
-         one_level_name = #{oneLevelName},
-         two_level_name = #{twoLevelName},
+         one_level_code = #{oneLevelCode},
+         two_level_code = #{twoLevelCode},
          ad_word = #{adWord},
          goods_introduce = #{goodsIntroduce},
          boss_name = #{bossName},

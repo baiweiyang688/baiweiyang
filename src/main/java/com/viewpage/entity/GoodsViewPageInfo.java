@@ -12,7 +12,7 @@ public class GoodsViewPageInfo {
      */
     private String goodsName;
     /**
-     * 商品状态 0 在售 1 已下架 2 未发布
+     * 商品状态 1 在售 2 已下架 3 未发布
      */
     private String goodsState;
     /**

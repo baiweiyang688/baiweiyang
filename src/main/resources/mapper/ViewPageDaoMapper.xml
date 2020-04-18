@@ -100,11 +100,15 @@
         a.goods_code goodsCode,
         a.goods_name goodsName,
         a.goods_state goodsState,
-        a.one_level_name oneLevelName,
-        a.two_level_name twoLevelName
-        from t_goods a
+        b.cate_name oneLevelName,
+        c.cate_name twoLevelName
+        from t_goods a,
+        t_goods_cate b,
+        t_goods_cate c
         where a.is_deleted = 0
-        and a.goods_state = 0
+        and a.goods_state = 1
+        and a.one_level_code = b.cate_code
+        and a.two_level_code = c.cate_code
         <if test="goodsName != null and goodsName != ''">
             and a.goods_name like concat('%', #{goodsName}, '%')
         </if>
