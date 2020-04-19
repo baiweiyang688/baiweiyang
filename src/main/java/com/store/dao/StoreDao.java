@@ -61,6 +61,19 @@ public interface StoreDao {
      */
     List<AddressInfo> findProvince(AddressInfo addressInfo);
 
+    /**
+     * 查询市下拉
+     * @param addressInfo
+     * @return
+     */
+    List<AddressInfo> findCity(AddressInfo addressInfo);
+
+    /**
+     * 查询区下拉
+     * @param addressInfo
+     * @return
+     */
+    List<AddressInfo> findDistrict(AddressInfo addressInfo);
 
 
 

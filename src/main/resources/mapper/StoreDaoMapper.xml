@@ -100,13 +100,13 @@
             and a.boss_name like concat('%', #{bossName}, '%')
         </if>
         <if test="provinceId != null and provinceId != ''">
-            and a.province_id like concat('%', #{provinceId}, '%')
+            and a.province_id = #{provinceId}
         </if>
         <if test="cityId != null and cityId != ''">
-            and a.city_id like concat('%', #{cityId}, '%')
+            and a.city_id = #{cityId}
         </if>
         <if test="districtId != null and districtId != ''">
-            and a.district_id like concat('%', #{districtId}, '%')
+            and a.district_id = #{districtId}
         </if>
         order by a.create_user desc
     </select>
@@ -147,7 +147,34 @@
     </update>
 
 
+    <!--省份下拉查询-->
+    <select id="findProvince" parameterType="com.store.entity.AddressInfo" resultType="com.store.entity.AddressInfo">
+        select
+            dict_id provinceId,
+            dict_name provinceName
+        from t_dict
+        where dict_type = '省'
+    </select>
 
+    <!--市下拉查询-->
+    <select id="findCity" parameterType="com.store.entity.AddressInfo" resultType="com.store.entity.AddressInfo">
+        select
+            dict_id cityId,
+            dict_name cityName
+        from t_dict
+        where dict_type = '市'
+        and parent_code = #{parentCode}
+    </select>
+
+    <!--区下拉查询-->
+    <select id="findDistrict" parameterType="com.store.entity.AddressInfo" resultType="com.store.entity.AddressInfo">
+        select
+            dict_id districtId,
+            dict_name districtName
+        from t_dict
+        where dict_type = '区'
+        and parent_code = #{parentCode}
+    </select>
 
 
 

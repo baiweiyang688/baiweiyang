@@ -155,5 +155,40 @@ public class StoreController {
         }
     }
 
+    /**
+     * 查询市下拉
+     * @param addressInfo
+     * @return AppResponse
+     * @Author 张鑫
+     * @Date 2020-3-26
+     */
+    @RequestMapping(value = "findCity")
+    public AppResponse findCity(AddressInfo addressInfo) {
+        try {
+            return storeService.findCity(addressInfo);
+        } catch (Exception e) {
+            logger.error("查询市下拉列表异常", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 查询区下拉
+     * @param addressInfo
+     * @return AppResponse
+     * @Author 张鑫
+     * @Date 2020-3-26
+     */
+    @RequestMapping(value = "findDistrict")
+    public AppResponse findDistrict(AddressInfo addressInfo) {
+        try {
+            return storeService.findDistrict(addressInfo);
+        } catch (Exception e) {
+            logger.error("查询市下拉列表异常", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 
 }

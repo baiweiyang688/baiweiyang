@@ -130,6 +130,30 @@ public class StoreService {
         return AppResponse.success("查询成功！", addressInfos);
     }
 
+    /**
+     * 查询市下拉
+     * @param addressInfo
+     * @return
+     * @Author 张鑫
+     * @Date 2020-04-8
+     */
+    @RequestMapping(value = "findCity")
+    public AppResponse findCity(AddressInfo addressInfo) {
+        List<AddressInfo> addressInfos = storeDao.findCity(addressInfo);
+        return AppResponse.success("查询成功！", addressInfos);
+    }
 
+    /**
+     * 查询区下拉
+     * @param addressInfo
+     * @return
+     * @Author 张鑫
+     * @Date 2020-04-8
+     */
+    @RequestMapping(value = "findDistrict")
+    public AppResponse findDistrict(AddressInfo addressInfo) {
+        List<AddressInfo> addressInfos = storeDao.findDistrict(addressInfo);
+        return AppResponse.success("查询成功！", addressInfos);
+    }
 
 }

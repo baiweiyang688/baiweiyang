@@ -3,6 +3,115 @@
 
 <mapper namespace="com.driver.dao.DriverDao">
 
+    <!--统计用户账号数量-->
+    <select id="countUserAcct" parameterType="com.driver.entity.DriverInfo"
+            resultType="int">
+        select count(user_acct)
+        from t_sys_user
+        where is_deleted = 0
+        and user_acct = #{driverAcct}
+        <if test="driverCode != null and driverCode != ''">
+            and user_code != #{driverCode}
+        </if>
+    </select>
+
+    <!--统计用户手机号码数量-->
+    <select id="countPhone" parameterType="com.driver.entity.DriverInfo"
+            resultType="int">
+        select count(user_phone)
+        from t_sys_user
+        where is_deleted = 0
+        and user_phone = #{driverPhone}
+        <if test="driverCode != null and driverCode != ''">
+            and user_code != #{driverCode}
+        </if>
+
+    </select>
+
+    <!--新增司机到用户表-->
+    <insert id="addUser" parameterType="com.driver.entity.DriverInfo">
+        insert into t_sys_user
+        (user_code,
+         user_name,
+         user_acct,
+         user_password,
+         user_sex,
+         user_phone,
+         user_mail,
+         user_idcard,
+         user_role,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{driverCode},
+            #{driverName},
+            #{driverAcct},
+            #{driverPassword},
+            #{driverSex},
+            #{driverPhone},
+            #{driverEmail},
+            #{driverIdCard},
+            3,
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--新增司机到司机表-->
+    <insert id="addDriver" parameterType="com.driver.entity.DriverInfo">
+        insert into t_driver
+        (driver_code,
+         province_id,
+         city_id,
+         district_id,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{driverCode},
+            #{provinceId},
+            #{cityId},
+            #{districtId},
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--获取司机信息-->
+    <select id="findDriver" parameterType="com.user.entity.UserInfo" resultType="com.user.entity.UserInfo">
+        select
+        a.user_code userCode,
+        a.user_name userName,
+        a.user_acct userAcct,
+        a.user_password userPassword,
+        a.user_sex userSex,
+        a.user_phone userPhone,
+        a.user_mail userEmail,
+        a.user_idcard userIdCard,
+        a.user_role,
+        a.is_deleted,
+        a.create_user,
+        a.create_time,
+        a.update_time,
+        a.last_modified_by,
+        a.version
+        from t_sys_user a
+        where a.user_code = #{userCode}
+        and is_deleted = 0
+    </select>
 
 
 

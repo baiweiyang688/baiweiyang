@@ -25,6 +25,18 @@ public class AddressInfo {
      * 区名称
      */
     private String districtName;
+    /**
+     * 父类编码
+     */
+    private String parentCode;
+
+    public String getParentCode() {
+        return parentCode;
+    }
+
+    public void setParentCode(String parentCode) {
+        this.parentCode = parentCode;
+    }
 
     public String getProvinceId() {
         return provinceId;
