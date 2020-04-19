@@ -7,6 +7,7 @@ import com.goods.entity.GoodsInfo;
 import com.viewpage.entity.GoodsViewPageInfo;
 import com.viewpage.dao.ViewPageDao;
 import com.viewpage.entity.ViewPageInfo;
+import com.viewpage.entity.ViewPageMes;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,8 +37,18 @@ public class ViewPageService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addViewPage(ViewPageInfo viewPageInfo) {
+        //判断轮播图输入的排序是否在数据库存在
+            int count2 = viewPageDao.countViewPageNum(viewPageInfo);
+            if (0 != count2){
+                return AppResponse.bizError("新增的轮播图序号已经存在，请重新设置轮播图序号");
+            }
+//        }
+       if(viewPageInfo.getViewPageState() == 0){
+           viewPageInfo.setViewPageState(1);
+       }
+
         //随机编号
-        viewPageInfo.setViewPageCode(StringUtil.getCommonCode(3));
+        viewPageInfo.setViewPageCode(StringUtil.getCommonCode(2));
         viewPageInfo.setIsDeleted(0);
         int count = viewPageDao.addViewPage(viewPageInfo);
         if (count == 0) {
@@ -127,6 +138,19 @@ public class ViewPageService {
         return AppResponse.success("查询成功！", goodsViewPageInfo);
     }
 
+
+    /**
+     * 查询轮播图详情
+     * @param viewPageCode
+     * @return
+     * @Author 张鑫
+     * @Date 2020-3-26
+     */
+    public AppResponse findViewPage(String viewPageCode) {
+        ViewPageMes viewPageInfo = viewPageDao.findViewPage(viewPageCode);
+        return AppResponse.success("查询成功！", viewPageInfo);
+    }
+
 //    @Transactional(rollbackFor = Exception.class)
 //    public AppResponse updateViewPageState(ViewPageInfo viewPageInfo) {
 //        AppResponse appResponse = AppResponse.success("修改成功");
@@ -146,6 +170,7 @@ public class ViewPageService {
 //        }
 //        return appResponse;
 //    }
+
 
 
 

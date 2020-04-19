@@ -48,13 +48,25 @@ public class StoreInfo {
      */
     private String provinceId;
     /**
+     * 省份名称
+     */
+    private String provinceName;
+    /**
      * 城市id
      */
     private String cityId;
     /**
+     * 城市名称
+     */
+    private String cityName;
+    /**
      * 区id
      */
     private String districtId;
+    /**
+     * 区名称
+     */
+    private String districtName;
     /**
      * 详细地址
      */
@@ -83,6 +95,30 @@ public class StoreInfo {
      * 版本号
      */
     private int version;
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public String getStoreInviteCode() {
+        return storeInviteCode;
+    }
+
+    public void setStoreInviteCode(String storeInviteCode) {
+        this.storeInviteCode = storeInviteCode;
+    }
 
     public String getStoreAcct() {
         return storeAcct;
@@ -124,6 +160,14 @@ public class StoreInfo {
         this.bossCode = bossCode;
     }
 
+    public String getBossName() {
+        return bossName;
+    }
+
+    public void setBossName(String bossName) {
+        this.bossName = bossName;
+    }
+
     public String getStoreLicence() {
         return storeLicence;
     }
@@ -140,6 +184,14 @@ public class StoreInfo {
         this.provinceId = provinceId;
     }
 
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
     public String getCityId() {
         return cityId;
     }
@@ -148,12 +200,28 @@ public class StoreInfo {
         this.cityId = cityId;
     }
 
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
     public String getDistrictId() {
         return districtId;
     }
 
     public void setDistrictId(String districtId) {
         this.districtId = districtId;
+    }
+
+    public String getDistrictName() {
+        return districtName;
+    }
+
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
     }
 
     public String getStoreAddress() {
@@ -210,37 +278,5 @@ public class StoreInfo {
 
     public void setVersion(int version) {
         this.version = version;
-    }
-
-    public String getStoreInviteCode() {
-        return storeInviteCode;
-    }
-
-    public void setStoreInviteCode(String storeInviteCode) {
-        this.storeInviteCode = storeInviteCode;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
-    }
-
-    public String getBossName() {
-        return bossName;
-    }
-
-    public void setBossName(String bossName) {
-        this.bossName = bossName;
     }
 }

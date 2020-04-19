@@ -4,6 +4,8 @@ import com.goods.controller.GoodsController;
 import com.goods.entity.GoodsInfo;
 import com.goodscate.service.GoodsCateService;
 import com.hotgoods.entity.HotGoodsInfo;
+import com.hotgoods.entity.HotGoodsList;
+import com.hotgoods.entity.HotGoodsShow;
 import com.hotgoods.service.HotGoodsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,4 +55,117 @@ public class HotGoodsController {
     }
 
 
+    /**
+     *查询热门商品详情
+     * @param hotGoodsCode
+     * @return AppResponse
+     * @author 张鑫
+     * @Date 2020-3-26
+     */
+    @RequestMapping(value = "findHotGoods")
+    public AppResponse findHotGoods(String hotGoodsCode) {
+        try {
+            return hotGoodsService.findHotGoods(hotGoodsCode);
+        } catch (Exception e) {
+            logger.error("商品查询错误", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 查询热门商品列表
+     * @param hotGoodsList
+     * @return AppResponse
+     * @Author 张鑫
+     * @Date 2020-3-26
+     */
+    @RequestMapping(value = "listHotGoods")
+    public AppResponse listHotGoods(HotGoodsList hotGoodsList) {
+        try {
+            return hotGoodsService.listHotGoods(hotGoodsList);
+        } catch (Exception e) {
+            logger.error("查询商品列表异常", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 修改热门商品信息
+     * @param hotGoodsInfo
+     * @return AppResponse
+     * @author 张鑫
+     * @Date 2020-3-26
+     */
+    @PostMapping("updateHotGoods")
+    public AppResponse updateHotGoods(HotGoodsInfo hotGoodsInfo){
+        try {
+            //获取修改者id
+            String userCode = AuthUtils.getCurrentUserId();
+            hotGoodsInfo.setLastModifiedBy(userCode);
+            return hotGoodsService.updateHotGoods(hotGoodsInfo);
+        }catch (Exception e){
+            logger.error("修改商品信息失败",e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 删除热门商品信息
+     * @param hotGoodsCode
+     * @return AppResponse
+     * @author 张鑫
+     * @Date 2020-3-26
+     */
+    @PostMapping("deleteHotGoods")
+    public AppResponse deleteHotGoods(String hotGoodsCode){
+        try {
+            String userId = AuthUtils.getCurrentUserId();
+            return hotGoodsService.deleteHotGoods(hotGoodsCode,userId);
+        }catch (Exception e){
+            logger.error("删除商品错误",e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     *查询展示数量详情
+     * @param
+     * @return AppResponse
+     * @author 张鑫
+     * @Date 2020-3-26
+     */
+    @RequestMapping(value = "findShowNumber")
+    public AppResponse findShowNumber(HotGoodsShow hotGoodsShow) {
+        try {
+            return hotGoodsService.findShowNumber(hotGoodsShow);
+        } catch (Exception e) {
+            logger.error("商品查询错误", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 修改展示数量信息
+     * @param showNumber
+     * @return AppResponse
+     * @author 张鑫
+     * @Date 2020-3-26
+     */
+    @PostMapping("updateShowNumber")
+    public AppResponse updateShowNumber(int showNumber){
+        try {
+            //获取修改者id
+            String userCode = "54das4da6";
+            return hotGoodsService.updateShowNumber(showNumber,userCode);
+        }catch (Exception e){
+            logger.error("修改展示数量失败",e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 }

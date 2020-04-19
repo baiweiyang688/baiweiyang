@@ -11,7 +11,7 @@
          viewpage_path,
          start_time,
          end_time,
-         goods_message,
+         goods_Code,
          is_deleted,
          create_user,
          create_time,
@@ -25,7 +25,7 @@
             #{viewPagePath},
             #{startTime},
             #{endTime},
-            #{goodsMessage},
+            #{goodsCode},
             #{isDeleted},
             #{createBy},
             now(),
@@ -77,7 +77,7 @@
         <if test="viewPageState != null and viewPageState != ''">
             and a.viewpage_state = #{viewPageState}
         </if>
-        order by a.viewpage_num desc
+        order by a.viewpage_num asc
     </select>
 
     <!--删除轮播图-->
@@ -132,5 +132,33 @@
         and is_deleted = 0
     </select>
 
+    <!--轮播图详情-->
+    <select id="findViewPage" parameterType="com.viewpage.entity.ViewPageMes" resultType="com.viewpage.entity.ViewPageMes">
+        select
+        a.viewpage_code viewPageCode,
+        a.viewpage_state viewPageState,
+        a.viewpage_path viewPagePath,
+        a.viewpage_num viewPageNum,
+        a.start_time startTime,
+        a.end_time endTime,
+        a.is_deleted,
+        a.create_user,
+        a.create_time,
+        a.update_time,
+        a.last_modified_by,
+        a.version
+        from t_viewpage a
+        where a.is_deleted = 0
+        and a.viewpage_code = #{viewPageCode}
+    </select>
+
+    <!--统计轮播图序号是否重复-->
+    <select id="countViewPageNum" parameterType="com.viewpage.entity.ViewPageInfo" resultType="int">
+        select count(viewpage_num)
+        from
+            t_viewpage
+        where viewpage_num =#{viewPageNum}
+        and is_deleted=0
+    </select>
 
 </mapper>

@@ -59,9 +59,7 @@ public class GoodsService {
             return AppResponse.bizError("商品名称已存在，请重新输入");
         }
         //随机编号
-//        goodsInfo.setGoodsCode(StringUtil.getCommonCode(3));
-        String goodsCode = RandomUtil.randomHomework();
-        goodsInfo.setGoodsCode(goodsCode);
+        goodsInfo.setGoodsCode(StringUtil.getCommonCode(2));
         goodsInfo.setIsDeleted(0);
         int count = goodsDao.addGoods(goodsInfo);
         if (count == 0) {

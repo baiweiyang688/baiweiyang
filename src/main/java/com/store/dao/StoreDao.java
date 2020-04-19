@@ -1,9 +1,12 @@
 package com.store.dao;
 
+import com.goods.entity.GoodsCate;
 import com.goods.entity.GoodsInfo;
+import com.store.entity.AddressInfo;
 import com.store.entity.StoreInfo;
 import com.user.entity.UserInfo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.tomcat.jni.Address;
 
 import java.util.List;
 
@@ -50,6 +53,15 @@ public interface StoreDao {
      * @return
      */
     int deleteStore(List<String> listCode,@Param("userId") String userId);
+
+    /**
+     * 查询省份下拉
+     * @param addressInfo
+     * @return
+     */
+    List<AddressInfo> findProvince(AddressInfo addressInfo);
+
+
 
 
 

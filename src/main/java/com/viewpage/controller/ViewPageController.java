@@ -40,7 +40,6 @@ public class ViewPageController {
      * @Author 张鑫
      * @Date 2020-3-25
      */
-
     @PostMapping("addViewPage")
     public AppResponse addViewPage(ViewPageInfo viewPageInfo) {
         try {
@@ -147,5 +146,24 @@ public class ViewPageController {
             throw e;
         }
     }
+
+    /**
+     *查询轮播图详情
+     * @param viewPageCode
+     * @return AppResponse
+     * @author 张鑫
+     * @Date 2020-3-26
+     */
+    @RequestMapping(value = "findViewPage")
+    public AppResponse findViewPage(String viewPageCode) {
+        try {
+            return viewPageService.findViewPage(viewPageCode);
+        } catch (Exception e) {
+            logger.error("商品查询错误", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
 
 }

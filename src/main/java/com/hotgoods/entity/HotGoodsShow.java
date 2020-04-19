@@ -1,18 +1,10 @@
 package com.hotgoods.entity;
 
-public class HotGoodsInfo {
+public class HotGoodsShow {
     /**
-     * 热门位商品编号
+     * 展示数量
      */
-    private String hotGoodsCode;
-    /**
-     * 热门位商品排序
-     */
-    private int hotSort;
-    /**
-     * 商品编号
-     */
-    private String goodsCode;
+    private int showNumber;
     /**
      * 作废标记 0为存在，1为作废
      */
@@ -38,28 +30,12 @@ public class HotGoodsInfo {
      */
     private int version;
 
-    public String getHotGoodsCode() {
-        return hotGoodsCode;
+    public int getShowNumber() {
+        return showNumber;
     }
 
-    public void setHotGoodsCode(String hotGoodsCode) {
-        this.hotGoodsCode = hotGoodsCode;
-    }
-
-    public int getHotSort() {
-        return hotSort;
-    }
-
-    public void setHotSort(int hotSort) {
-        this.hotSort = hotSort;
-    }
-
-    public String getGoodsCode() {
-        return goodsCode;
-    }
-
-    public void setGoodsCode(String goodsCode) {
-        this.goodsCode = goodsCode;
+    public void setShowNumber(int showNumber) {
+        this.showNumber = showNumber;
     }
 
     public int getIsDeleted() {

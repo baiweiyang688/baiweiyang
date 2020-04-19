@@ -2,8 +2,10 @@ package com.store.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.goods.entity.GoodsCate;
 import com.goods.entity.GoodsInfo;
 import com.store.dao.StoreDao;
+import com.store.entity.AddressInfo;
 import com.store.entity.StoreInfo;
 import com.viewpage.dao.ViewPageDao;
 import com.viewpage.entity.ViewPageInfo;
@@ -115,6 +117,18 @@ public class StoreService {
         return appResponse;
     }
 
+    /**
+     * 查询省份下拉
+     * @param addressInfo
+     * @return
+     * @Author 张鑫
+     * @Date 2020-04-8
+     */
+    @RequestMapping(value = "findProvince")
+    public AppResponse findProvince(AddressInfo addressInfo) {
+        List<AddressInfo> addressInfos = storeDao.findProvince(addressInfo);
+        return AppResponse.success("查询成功！", addressInfos);
+    }
 
 
 

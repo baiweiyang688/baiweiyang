@@ -92,7 +92,7 @@
         t_goods_cate a,
         t_goods_cate b
     where a.cate_code =b.cate_parent_code and a.is_deleted=0
-    and a.cate_name = #{cateName}
+
     </select>
 
     <resultMap id="ResultMap" type="com.goodscate.entity.GoodsCateList">

@@ -1,7 +1,9 @@
 package com.store.controller;
 
 
+import com.goods.entity.GoodsCate;
 import com.goods.entity.GoodsInfo;
+import com.store.entity.AddressInfo;
 import com.store.entity.StoreInfo;
 import com.store.service.StoreService;
 import com.viewpage.controller.ViewPageController;
@@ -130,6 +132,24 @@ public class StoreController {
             return storeService.deleteStore(storeCode,userId);
         }catch (Exception e){
             logger.error("删除商品错误",e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 查询省份下拉
+     * @param addressInfo
+     * @return AppResponse
+     * @Author 张鑫
+     * @Date 2020-3-26
+     */
+    @RequestMapping(value = "findProvince")
+    public AppResponse findProvince(AddressInfo addressInfo) {
+        try {
+            return storeService.findProvince(addressInfo);
+        } catch (Exception e) {
+            logger.error("查询省份下拉列表异常", e);
             System.out.println(e.toString());
             throw e;
         }

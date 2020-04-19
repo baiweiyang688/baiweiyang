@@ -1,12 +1,6 @@
 package com.viewpage.entity;
 
-import java.util.Date;
-
-/**
- * @author 百未央
- * @Description 轮播图信息
- */
-public class ViewPageInfo {
+public class ViewPageMes {
     /**
      * 页码
      */
@@ -67,7 +61,6 @@ public class ViewPageInfo {
      * 版本号
      */
     private int version;
-
 
     public int getPageSize() {
         return pageSize;

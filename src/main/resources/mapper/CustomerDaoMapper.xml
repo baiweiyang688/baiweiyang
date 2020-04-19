@@ -11,9 +11,11 @@
         a.user_phone userPhone,
         a.user_mail userEmail,
         a.user_idcard userIdCard
-        from t_sys_user a
+        from t_sys_user a,
+             t_sys_cust b
         where a.is_deleted = 0
-        and a.user_role = 1
+        and a.user_role = 3
+        and a.user_code = b.cust_code
         <if test="userAcct != null and userAcct != ''">
             and a.user_acct like concat('%', #{userAcct}, '%')
         </if>

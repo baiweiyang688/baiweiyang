@@ -1,8 +1,10 @@
 package com.viewpage.dao;
 
 import com.goods.entity.GoodsInfo;
+import com.hotgoods.entity.HotGoodsInfo;
 import com.viewpage.entity.GoodsViewPageInfo;
 import com.viewpage.entity.ViewPageInfo;
+import com.viewpage.entity.ViewPageMes;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -63,6 +65,19 @@ public interface ViewPageDao {
      */
     GoodsViewPageInfo findGoods(@Param("goodsName") String goodsName,@Param("goodsCode") String goodsCode);
 
+    /**
+     * 查询轮播图信息详情
+     * @param viewPageCode
+     * @return 修改结果
+     */
+    ViewPageMes findViewPage(@Param("viewPageCode") String viewPageCode);
+
+    /**
+     * 统计轮播图序号
+     * @param viewPageInfo
+     * @return
+     */
+    int countViewPageNum(ViewPageInfo viewPageInfo);
 
 
 }
