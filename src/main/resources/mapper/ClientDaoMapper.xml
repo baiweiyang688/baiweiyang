@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.client.dao.ClientDao">
+    <!--统计邀请码是否为店家邀请码-->
+    <select id="countInviteCode" parameterType="com.client.entity.RegisterInfo"
+            resultType="int">
+        select count(invite_code)
+        from t_store
+        where is_deleted = 0
+        and invite_code = #{inviteCode}
+    </select>
+
+    <!--统计用户账号数量-->
+    <select id="countUserAcct" parameterType="com.client.entity.RegisterInfo"
+            resultType="int">
+        select count(user_acct)
+        from t_sys_user
+        where is_deleted = 0
+        and user_acct = #{userAcct}
+        <if test="userCode != null and userCode != ''">
+            and user_code != #{userCode}
+        </if>
+    </select>
+
+    <!--统计用户手机号数量-->
+    <select id="countUserPhone" parameterType="com.client.entity.RegisterInfo"
+            resultType="int">
+        select count(user_phone)
+        from t_sys_user
+        where is_deleted = 0
+        and user_phone = #{userPhone}
+        <if test="userCode != null and userCode != ''">
+            and user_code != #{userCode}
+        </if>
+    </select>
+
+    <!--新增用户到用户表-->
+    <insert id="registerUser" parameterType="com.client.entity.RegisterInfo">
+        insert into t_sys_user
+        (user_code,
+         user_name,
+         user_acct,
+         user_password,
+         user_sex,
+         user_phone,
+         user_mail,
+         user_idcard,
+         user_role,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{userCode},
+            #{userName},
+            #{userAcct},
+            #{userPassword},
+            #{userSex},
+            #{userPhone},
+            #{userEmail},
+            #{userIdCard},
+            #{userRole},
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--新增用户到客户表-->
+    <insert id="registerCust" parameterType="com.client.entity.RegisterInfo">
+        insert into t_sys_cust
+        (cust_code,
+         invite_code,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{userCode},
+            #{inviteCode},
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--获取轮播图列表-->
+    <select id="listViewPage" parameterType="com.client.entity.ViewPageAppInfo" resultType="com.client.entity.ViewPageAppInfo">
+        select
+        a.viewpage_code viewPageCode,
+        a.viewpage_path viewPagePath,
+        a.viewpage_num viewPageNum,
+        a.goods_code goodsCode
+        from t_viewpage a
+        where a.is_deleted = 0
+        and a.viewpage_state = 1
+        order by a.viewpage_num asc
+    </select>
+
+    <!--获取热门商品列表-->
+    <select id="listHotGoods" parameterType="com.client.entity.HotGoodsAppInfo" resultType="com.client.entity.HotGoodsAppInfo">
+        select
+        a.hot_sort hotSort,
+        a.goods_code goodsCode,
+        b.goods_name goodsName,
+        b.now_price nowPrice,
+        b.cost_price costPrice,
+        from t_hot_goods a,
+        t_goods b
+        where a.is_deleted = 0
+        and b.is_deleted = 0
+        and a.goods_code = b.goods_code
+        order by a.hot_sort asc
+    </select>
+
+
+
+
+
+
+</mapper>

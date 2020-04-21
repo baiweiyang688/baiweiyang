@@ -1,6 +1,7 @@
 package com.driver.controller;
 
 import com.driver.entity.DriverInfo;
+import com.driver.entity.DriverList;
 import com.driver.service.DriverService;
 import com.goods.controller.GoodsController;
 import com.goods.entity.GoodsInfo;
@@ -68,5 +69,62 @@ public class DriverController {
         }
     }
 
+    /**
+     * 修改司机信息
+     * @param driverInfo
+     * @return AppResponse
+     * @author 张鑫
+     * @Date 2020-3-26
+     */
+    @PostMapping("updateDriver")
+    public AppResponse updateDriver(DriverInfo driverInfo){
+        try {
+            //获取修改者id
+            String userCode = AuthUtils.getCurrentUserId();
+            driverInfo.setLastModifiedBy(userCode);
+            return driverService.updateDriver(driverInfo);
+        }catch (Exception e){
+            logger.error("修改商品信息失败",e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 查询司机列表
+     * @param driverList
+     * @return AppResponse
+     * @Author 张鑫
+     * @Date 2020-3-26
+     */
+    @RequestMapping(value = "listDriver")
+    public AppResponse listDriver(DriverList driverList) {
+        try {
+            return driverService.listDriver(driverList);
+        } catch (Exception e) {
+            logger.error("查询司机列表异常", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 删除司机信息
+     * @param driverCode
+     * @return AppResponse
+     * @author 张鑫
+     * @Date 2020-3-26
+     */
+    @PostMapping("deleteDriver")
+    public AppResponse deleteDriver(String driverCode){
+        try {
+            String userId = AuthUtils.getCurrentUserId();
+            return driverService.deleteDriver(driverCode,userId);
+        }catch (Exception e){
+            logger.error("删除商品错误",e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 
 }

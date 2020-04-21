@@ -157,7 +157,6 @@ public class HotGoodsService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateShowNumber(int showNumber,String userCode) {
         AppResponse appResponse = AppResponse.success("修改成功");
-        //这里调用了数据库修改 数据库里version是条件，veision没有对应上则会弹出这句话，被其他人修改了
         int count = hotGoodsDao.updateShowNumber(showNumber,userCode);
         if (0 == count) {
             return AppResponse.success("数据有变化，请刷新！");

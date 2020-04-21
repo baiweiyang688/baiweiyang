@@ -14,7 +14,7 @@ public class StoreInfo {
     /**
      * 门店邀请码
      */
-    private String storeInviteCode;
+    private String inviteCode;
     /**
      * 门店账号
      */
@@ -112,12 +112,12 @@ public class StoreInfo {
         this.pageNum = pageNum;
     }
 
-    public String getStoreInviteCode() {
-        return storeInviteCode;
+    public String getInviteCode() {
+        return inviteCode;
     }
 
-    public void setStoreInviteCode(String storeInviteCode) {
-        this.storeInviteCode = storeInviteCode;
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
     }
 
     public String getStoreAcct() {

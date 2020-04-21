@@ -46,7 +46,6 @@ public class UserService {
             return AppResponse.bizError("新增失败，请重试！");
         }
         return AppResponse.success("新增成功");
-
     }
 
     /**

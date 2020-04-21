@@ -18,8 +18,6 @@ import java.util.UUID;
 
 /**
  * 文件上传控制器
- * @author liyuxian
- * @time 2020-03-28
  */
 @RestController
 @RequestMapping("/upload")

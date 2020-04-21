@@ -61,7 +61,7 @@
         a.store_phone storePhone,
         a.store_address storeAddress,
         a.boss_name bossName,
-        a.store_invite_code storeInviteCode,
+        a.invite_code inviteCode,
         a.store_acct storeAcct,
         a.province_id provinceId,
         a.city_id cityId,
@@ -86,10 +86,12 @@
         a.store_phone storePhone,
         a.store_address storeAddress,
         a.boss_name bossName,
-        a.store_invite_code storeInviteCode,
+        a.invite_code inviteCode,
         a.store_acct storeAcct
-        from t_store a
+        from t_store a,
+             t_sys_user b
         where a.is_deleted = 0
+        and a.boss_code = b.user_code
         <if test="storeCode != null and storeCode != ''">
             and a.store_Code like concat('%', #{storeCode}, '%')
         </if>
@@ -119,7 +121,7 @@
          store_phone = #{storePhone},
          store_address = #{storeAddress},
          boss_name = #{bossName},
-         store_invite_code = #{storeInviteCode},
+         invite_code = #{inviteCode},
          store_acct = #{storeAcct},
          province_id = #{provinceId},
          city_id = #{cityId},
