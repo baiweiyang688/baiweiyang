@@ -23,7 +23,9 @@
          store_name,
          store_phone,
          boss_code,
+         boss_name,
          store_licence,
+         invite_code,
          province_id,
          city_id,
          district_id,
@@ -40,7 +42,9 @@
             #{storeName},
             #{storePhone},
             #{bossCode},
+            #{bossName},
             #{storeLicence},
+            #{inviteCode},
             #{provinceId},
             #{cityId},
             #{districtId},
@@ -60,7 +64,8 @@
         a.store_name storeName,
         a.store_phone storePhone,
         a.store_address storeAddress,
-        a.boss_name bossName,
+        a.boss_code bossCode,
+        b.user_name bossName,
         a.invite_code inviteCode,
         a.store_acct storeAcct,
         a.province_id provinceId,
@@ -72,9 +77,12 @@
         a.update_time,
         a.last_modified_by,
         a.version
-        from t_store a
+        from t_store a,
+             t_sys_user b
         where a.store_code = #{storeCode}
-        and is_deleted = 0
+        and a.is_deleted = 0
+        and b.is_deleted = 0
+        and a.boss_code = b.user_code
     </select>
 
 
@@ -85,9 +93,10 @@
         a.store_name storeName,
         a.store_phone storePhone,
         a.store_address storeAddress,
-        a.boss_name bossName,
+        b.user_name bossName,
         a.invite_code inviteCode,
-        a.store_acct storeAcct
+        a.store_acct storeAcct,
+        a.version version
         from t_store a,
              t_sys_user b
         where a.is_deleted = 0
@@ -121,8 +130,8 @@
          store_phone = #{storePhone},
          store_address = #{storeAddress},
          boss_name = #{bossName},
+         boss_code = #{bossCode},
          invite_code = #{inviteCode},
-         store_acct = #{storeAcct},
          province_id = #{provinceId},
          city_id = #{cityId},
          district_id = #{districtId},
@@ -178,6 +187,15 @@
         and parent_code = #{parentCode}
     </select>
 
+    <!--店长下拉查询-->
+    <select id="findBoss" parameterType="com.store.entity.BossInfo" resultType="com.store.entity.BossInfo">
+        select
+            user_code bossCode,
+            user_name bossName
+        from t_sys_user
+        where is_deleted = 0
+        and user_role = 2
+    </select>
 
 
 </mapper>

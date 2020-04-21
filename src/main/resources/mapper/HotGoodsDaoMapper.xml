@@ -10,6 +10,9 @@
             t_hot_goods
         where goods_code=#{goodsCode}
         and is_deleted=0
+        <if test="hotGoodsCode != null and hotGoodsCode != ''">
+            and hot_goods_code != #{hotGoodsCode}
+        </if>
     </select>
 
     <!--统计热门商品序号-->
@@ -18,6 +21,9 @@
         from t_hot_goods
         where hot_sort=#{hotSort}
         and is_deleted=0
+        <if test="hotGoodsCode != null and hotGoodsCode != ''">
+            and hot_goods_code != #{hotGoodsCode}
+        </if>
     </select>
 
     <!--新增热门商品-->

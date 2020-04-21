@@ -3,6 +3,7 @@ package com.store.dao;
 import com.goods.entity.GoodsCate;
 import com.goods.entity.GoodsInfo;
 import com.store.entity.AddressInfo;
+import com.store.entity.BossInfo;
 import com.store.entity.StoreInfo;
 import com.user.entity.UserInfo;
 import org.apache.ibatis.annotations.Param;
@@ -74,6 +75,14 @@ public interface StoreDao {
      * @return
      */
     List<AddressInfo> findDistrict(AddressInfo addressInfo);
+
+
+    /**
+     * 查询店家下拉
+     * @param
+     * @return
+     */
+    List<BossInfo> findBoss(BossInfo bossInfo);
 
 
 

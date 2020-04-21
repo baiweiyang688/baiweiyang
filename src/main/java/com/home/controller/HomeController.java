@@ -1,15 +1,10 @@
-package com.client.controller;
+package com.home.controller;
 
 
-import com.client.entity.HotGoodsAppInfo;
-import com.client.entity.RegisterInfo;
-import com.client.entity.ViewPageAppInfo;
-import com.client.service.ClientService;
-import com.customer.service.CustomerService;
-import com.goods.controller.GoodsController;
-import com.hotgoods.entity.HotGoodsList;
-import com.user.entity.UserInfo;
-import com.viewpage.entity.ViewPageInfo;
+import com.home.entity.HotGoodsAppInfo;
+import com.home.entity.RegisterInfo;
+import com.home.entity.ViewPageAppInfo;
+import com.home.service.HomeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,19 +16,19 @@ import util.AuthUtils;
 import javax.annotation.Resource;
 
 /**
- * @Description 客户端
+ * @Description 客户端主页
  * @Author 张鑫
  * @Date 2020-4-20
  */
 //映射注释
 @RestController
 @RequestMapping("/client")
-public class ClientController {
+public class HomeController {
     public static final Logger logger =
-            LoggerFactory.getLogger(ClientController.class);
+            LoggerFactory.getLogger(HomeController.class);
 
     @Resource
-    private ClientService clientService;
+    private HomeService homeService;
 
     /**
      * 注册用户
@@ -46,7 +41,7 @@ public class ClientController {
         try {
             String userId = AuthUtils.getCurrentUserId();
             registerInfo.setCreateBy(userId);
-            AppResponse appResponse = clientService.registerUser(registerInfo);
+            AppResponse appResponse = homeService.registerUser(registerInfo);
             return appResponse;
         } catch (Exception e) {
             logger.error("用户新增失败", e);
@@ -65,7 +60,7 @@ public class ClientController {
     @RequestMapping(value = "listViewPage")
     public AppResponse listViewPage(ViewPageAppInfo viewPageAppInfo) {
         try {
-            return clientService.listViewPage(viewPageAppInfo);
+            return homeService.listViewPage(viewPageAppInfo);
         } catch (Exception e) {
             logger.error("查询商品列表异常", e);
             System.out.println(e.toString());
@@ -83,7 +78,7 @@ public class ClientController {
     @RequestMapping(value = "listHotGoods")
     public AppResponse listHotGoods(HotGoodsAppInfo hotGoodsAppInfo) {
         try {
-            return clientService.listHotGoods(hotGoodsAppInfo);
+            return homeService.listHotGoods(hotGoodsAppInfo);
         } catch (Exception e) {
             logger.error("查询商品列表异常", e);
             System.out.println(e.toString());

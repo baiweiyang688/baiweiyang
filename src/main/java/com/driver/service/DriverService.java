@@ -44,7 +44,7 @@ public class DriverService {
             return AppResponse.bizError("用户电话已使用，请重新输入");
         }
         //随机编号
-        if(driverInfo.getDriverSex() == null){
+        if(driverInfo.getDriverSex() == null || "".equals(driverInfo.getDriverSex())){
             driverInfo.setDriverSex("1");
         }
 //        driverInfo.setDriverPassword(PasswordUtils.generatePassword(driverInfo.getDriverPassword()));

@@ -1,14 +1,12 @@
-package com.client.service;
+package com.home.service;
 
 
-import com.client.dao.ClientDao;
-import com.client.entity.HotGoodsAppInfo;
-import com.client.entity.RegisterInfo;
-import com.client.entity.ViewPageAppInfo;
+import com.home.dao.HomeDao;
+import com.home.entity.HotGoodsAppInfo;
+import com.home.entity.RegisterInfo;
+import com.home.entity.ViewPageAppInfo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.hotgoods.entity.HotGoodsList;
-import com.user.entity.UserInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +17,10 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-public class ClientService {
+public class HomeService {
 
     @Resource
-    private ClientDao clientDao;
+    private HomeDao homeDao;
 
     /**
      * 注册用户
@@ -35,15 +33,15 @@ public class ClientService {
     @Transactional(rollbackFor = Exception.class)
     //检验账号是否存在
     public AppResponse registerUser(RegisterInfo registerInfo){
-        int countUserAcct = clientDao.countUserAcct(registerInfo);
+        int countUserAcct = homeDao.countUserAcct(registerInfo);
         if(countUserAcct != 0){
             return AppResponse.bizError("用户账号已存在，请重新输入！");
         }
-        int countUserPhone = clientDao.countUserPhone(registerInfo);
+        int countUserPhone = homeDao.countUserPhone(registerInfo);
         if (countUserPhone != 0){
             return AppResponse.bizError("用户手机号已存在，请重新输入");
         }
-        int countInviteCode = clientDao.countInviteCode(registerInfo);
+        int countInviteCode = homeDao.countInviteCode(registerInfo);
         if (countInviteCode == 0){
             return AppResponse.bizError("门店邀请码不存在，请重新输入!");
         }
@@ -56,8 +54,8 @@ public class ClientService {
         //默认顾客
         registerInfo.setUserRole(4);
         //新增用户
-        int count = clientDao.registerUser(registerInfo);
-        int count2 = clientDao.registerCust(registerInfo);
+        int count = homeDao.registerUser(registerInfo);
+        int count2 = homeDao.registerCust(registerInfo);
         if (count == 0 || count2 == 0){
             return AppResponse.bizError("新增失败，请重试！");
         }
@@ -74,7 +72,7 @@ public class ClientService {
      */
     @RequestMapping(value = "listViewPage")
     public AppResponse listViewPage(ViewPageAppInfo viewPageAppInfo) {
-        List<ViewPageAppInfo> viewPageInfoList = clientDao.listViewPage(viewPageAppInfo);
+        List<ViewPageAppInfo> viewPageInfoList = homeDao.listViewPage(viewPageAppInfo);
         return AppResponse.success("查询成功！", viewPageInfoList);
     }
 
@@ -88,7 +86,7 @@ public class ClientService {
     @RequestMapping(value = "listHotGoods")
     public AppResponse listHotGoods(HotGoodsAppInfo hotGoodsAppInfo) {
         PageHelper.startPage(hotGoodsAppInfo.getPageNum(), hotGoodsAppInfo.getPageSize());
-        List<HotGoodsAppInfo> goodsInfoList = clientDao.listHotGoods(hotGoodsAppInfo);
+        List<HotGoodsAppInfo> goodsInfoList = homeDao.listHotGoods(hotGoodsAppInfo);
         PageInfo<HotGoodsAppInfo> pageData = new PageInfo<HotGoodsAppInfo>(goodsInfoList);
         return AppResponse.success("查询成功！", pageData);
     }

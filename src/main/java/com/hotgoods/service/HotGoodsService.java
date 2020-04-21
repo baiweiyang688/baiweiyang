@@ -93,20 +93,13 @@ public class HotGoodsService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateHotGoods(HotGoodsInfo hotGoodsInfo) {
         AppResponse appResponse = AppResponse.success("修改成功");
-        HotGoodsMes hotGoodsMes = hotGoodsDao.findHotGoods(hotGoodsInfo.getHotGoodsCode());
-        //比较原热门排序序号跟原序号是否相等
-        if(hotGoodsMes.getHotSort() != hotGoodsInfo.getHotSort()){
-            int countHotSort = hotGoodsDao.countHotSort(hotGoodsInfo);
-            if(0 != countHotSort){
-                return AppResponse.bizError("修改的热门商品序号已存在,请重新输入");
-            }
+        int countGoodsName = hotGoodsDao.countHotSort(hotGoodsInfo);
+        if (countGoodsName != 0) {
+            return AppResponse.bizError("当前热门排序序号已存在，请重新输入");
         }
-        //判断商品编号
-        if(!hotGoodsMes.getGoodsCode().equals(hotGoodsInfo.getGoodsCode())){
-            int countGoodsCode = hotGoodsDao.countGoods(hotGoodsInfo);
-            if(0 != countGoodsCode){
-                return AppResponse.bizError("修改的商品编号已经是热门商品，请重新输入");
-            }
+        int countGoods = hotGoodsDao.countGoods(hotGoodsInfo);
+        if (countGoods != 0) {
+            return AppResponse.bizError("当前商品已是热门商品，请重新选择商品");
         }
         //这里调用了数据库修改 数据库里version是条件，veision没有对应上则会弹出这句话，被其他人修改了
         int count = hotGoodsDao.updateHotGoods(hotGoodsInfo);

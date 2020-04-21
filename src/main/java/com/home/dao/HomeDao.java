@@ -1,13 +1,13 @@
-package com.client.dao;
+package com.home.dao;
 
-import com.client.entity.HotGoodsAppInfo;
-import com.client.entity.RegisterInfo;
-import com.client.entity.ViewPageAppInfo;
+import com.home.entity.HotGoodsAppInfo;
+import com.home.entity.RegisterInfo;
+import com.home.entity.ViewPageAppInfo;
 
 
 import java.util.List;
 
-public interface ClientDao {
+public interface HomeDao {
     /**
      * 统计邀请码是否为店家邀请码
      * @param registerInfo

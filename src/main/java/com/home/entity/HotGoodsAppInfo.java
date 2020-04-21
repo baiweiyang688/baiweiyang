@@ -1,4 +1,4 @@
-package com.client.entity;
+package com.home.entity;
 
 public class HotGoodsAppInfo {
     /**

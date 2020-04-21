@@ -4,6 +4,7 @@ package com.store.controller;
 import com.goods.entity.GoodsCate;
 import com.goods.entity.GoodsInfo;
 import com.store.entity.AddressInfo;
+import com.store.entity.BossInfo;
 import com.store.entity.StoreInfo;
 import com.store.service.StoreService;
 import com.viewpage.controller.ViewPageController;
@@ -184,6 +185,24 @@ public class StoreController {
     public AppResponse findDistrict(AddressInfo addressInfo) {
         try {
             return storeService.findDistrict(addressInfo);
+        } catch (Exception e) {
+            logger.error("查询市下拉列表异常", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 查询店长下拉
+     * @param bossInfo
+     * @return AppResponse
+     * @Author 张鑫
+     * @Date 2020-3-26
+     */
+    @RequestMapping(value = "findBoss")
+    public AppResponse findBoss(BossInfo bossInfo) {
+        try {
+            return storeService.findBoss(bossInfo);
         } catch (Exception e) {
             logger.error("查询市下拉列表异常", e);
             System.out.println(e.toString());

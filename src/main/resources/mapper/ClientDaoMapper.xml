@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.client.dao.ClientDao">
+<mapper namespace="com.home.dao.HomeDao">
     <!--统计邀请码是否为店家邀请码-->
-    <select id="countInviteCode" parameterType="com.client.entity.RegisterInfo"
+    <select id="countInviteCode" parameterType="com.home.entity.RegisterInfo"
             resultType="int">
         select count(invite_code)
         from t_store
@@ -12,7 +12,7 @@
     </select>
 
     <!--统计用户账号数量-->
-    <select id="countUserAcct" parameterType="com.client.entity.RegisterInfo"
+    <select id="countUserAcct" parameterType="com.home.entity.RegisterInfo"
             resultType="int">
         select count(user_acct)
         from t_sys_user
@@ -24,7 +24,7 @@
     </select>
 
     <!--统计用户手机号数量-->
-    <select id="countUserPhone" parameterType="com.client.entity.RegisterInfo"
+    <select id="countUserPhone" parameterType="com.home.entity.RegisterInfo"
             resultType="int">
         select count(user_phone)
         from t_sys_user
@@ -36,7 +36,7 @@
     </select>
 
     <!--新增用户到用户表-->
-    <insert id="registerUser" parameterType="com.client.entity.RegisterInfo">
+    <insert id="registerUser" parameterType="com.home.entity.RegisterInfo">
         insert into t_sys_user
         (user_code,
          user_name,
@@ -72,7 +72,7 @@
     </insert>
 
     <!--新增用户到客户表-->
-    <insert id="registerCust" parameterType="com.client.entity.RegisterInfo">
+    <insert id="registerCust" parameterType="com.home.entity.RegisterInfo">
         insert into t_sys_cust
         (cust_code,
          invite_code,
@@ -94,7 +94,7 @@
     </insert>
 
     <!--获取轮播图列表-->
-    <select id="listViewPage" parameterType="com.client.entity.ViewPageAppInfo" resultType="com.client.entity.ViewPageAppInfo">
+    <select id="listViewPage" parameterType="com.home.entity.ViewPageAppInfo" resultType="com.home.entity.ViewPageAppInfo">
         select
         a.viewpage_code viewPageCode,
         a.viewpage_path viewPagePath,
@@ -107,15 +107,17 @@
     </select>
 
     <!--获取热门商品列表-->
-    <select id="listHotGoods" parameterType="com.client.entity.HotGoodsAppInfo" resultType="com.client.entity.HotGoodsAppInfo">
+    <select id="listHotGoods" parameterType="com.home.entity.HotGoodsAppInfo" resultType="com.home.entity.HotGoodsAppInfo">
         select
+        a.hot_goods_code hotGoodsCode,
         a.hot_sort hotSort,
         a.goods_code goodsCode,
         b.goods_name goodsName,
         b.now_price nowPrice,
         b.cost_price costPrice,
+        b.goods_image goodsImage
         from t_hot_goods a,
-        t_goods b
+             t_goods b
         where a.is_deleted = 0
         and b.is_deleted = 0
         and a.goods_code = b.goods_code
