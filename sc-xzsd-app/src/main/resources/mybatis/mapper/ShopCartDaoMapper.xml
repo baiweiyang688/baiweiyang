@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.xzsd.app.shopcart.dao.ShopCartDao">
+
+    <!--获取商品详情信息-->
+    <select id="findGoodsDe" parameterType="com.xzsd.app.shopcart.entity.GoodsMes" resultType="com.xzsd.app.shopcart.entity.GoodsMes">
+        select
+        a.goods_code goodsCode,
+        a.goods_name goodsName,
+        a.goods_introduce goodsIntroduce,
+        a.inventory Inventory,
+        a.cost_price costPrice,
+        a.now_price nowPrice,
+        a.goods_image goodsImage,
+        a.publisher publisher,
+        a.author author,
+        a.store_name storeName,
+        a.goods_sales goodsSales,
+        a.upload_time uploadTime,
+        a.goods_page_view goodsPageView
+        from t_goods a
+        where a.goods_code = #{goodsCode}
+    </select>
+
+    <!--添加到购物车-->
+    <insert id="addShopCart" parameterType="com.xzsd.app.shopcart.entity.ShopCartInfo">
+        insert into t_shop_cart
+        (shop_cart_code,
+         cust_code,
+         goods_code,
+         goods_count,
+         total_price,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{shopCartCode},
+            #{custCode},
+            #{goodsCode},
+            #{goodsCount},
+            #{totalPrice},
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--获取购物车列表信息-->
+    <select id="listShopCart" parameterType="com.xzsd.app.shopcart.entity.ShopCartList" resultType="com.xzsd.app.shopcart.entity.ShopCartList">
+        select
+        b.goods_code goodsCode,
+        b.goods_name goodsName,
+        b.now_price nowPrice,
+        b.goods_image goodsImage,
+        a.shop_cart_code shopCartCode,
+        a.goods_count goodsCount,
+        a.total_price totalPrice,
+        a.version version
+        from t_shop_cart a
+        left join t_goods b on (b.goods_code = a.goods_code)
+        where a.cust_code = #{userCode}
+        and a.is_deleted = 0
+    </select>
+
+    <!--删除购物车清单商品-->
+    <update id="deleteShopCart" parameterType="com.xzsd.app.shopcart.entity.ShopCartList">
+        update t_shop_cart
+        set
+        is_deleted = 1,
+        update_time = now(),
+        last_modified_by   = #{userId},
+        version = version + 1
+        where shop_cart_code in
+        <foreach item="shopCartCode" index="index" collection="listCode" open="(" separator="," close=")">
+            #{shopCartCode}
+        </foreach>
+    </update>
+
+    <!--修改购物车商品数量-->
+    <update id="updateShopCart" parameterType="com.xzsd.app.shopcart.entity.ShopCartInfo">
+        update t_shop_cart
+         set
+            goods_count = #{goodsCount},
+            total_price = #{totalPrice},
+            last_modified_by   = #{lastModifiedBy},
+            update_time = now(),
+            version = version + 1
+        where is_deleted = 0
+        and shop_cart_code = #{shopCartCode}
+    </update>
+
+
+</mapper>

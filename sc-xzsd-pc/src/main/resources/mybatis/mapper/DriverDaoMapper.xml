@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.xzsd.pc.driver.dao.DriverDao">
+
+    <!--统计用户账号数量-->
+    <select id="countUserAcct" parameterType="com.xzsd.pc.driver.entity.DriverInfo"
+            resultType="int">
+        select count(user_acct)
+        from t_sys_user
+        where is_deleted = 0
+        and user_acct = #{driverAcct}
+        <if test="driverCode != null and driverCode != ''">
+            and user_code != #{driverCode}
+        </if>
+    </select>
+
+    <!--统计用户手机号码数量-->
+    <select id="countPhone" parameterType="com.xzsd.pc.driver.entity.DriverInfo"
+            resultType="int">
+        select count(user_phone)
+        from t_sys_user
+        where is_deleted = 0
+        and user_phone = #{driverPhone}
+        <if test="driverCode != null and driverCode != ''">
+            and user_code != #{driverCode}
+        </if>
+
+    </select>
+
+    <!--新增司机到用户表-->
+    <insert id="addUser" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+        insert into t_sys_user
+        (user_code,
+         user_name,
+         user_acct,
+         user_password,
+         user_sex,
+         user_phone,
+         user_mail,
+         user_idcard,
+         user_role,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{driverCode},
+            #{driverName},
+            #{driverAcct},
+            #{driverPassword},
+            #{driverSex},
+            #{driverPhone},
+            #{driverEmail},
+            #{driverIdCard},
+            3,
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--新增司机到司机表-->
+    <insert id="addDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+        insert into t_driver
+        (driver_code,
+         province_id,
+         city_id,
+         district_id,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{driverCode},
+            #{provinceId},
+            #{cityId},
+            #{districtId},
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--获取司机信息-->
+    <select id="findDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="com.xzsd.pc.driver.entity.DriverInfo">
+        select
+        a.user_name driverName,
+        a.user_acct driverAcct,
+        a.user_password driverPassword,
+        a.user_sex driverSex,
+        a.user_phone driverPhone,
+        a.user_mail driverEmail,
+        a.user_idcard driverIdCard,
+        b.province_id provinceId,
+        b.city_id cityId,
+        b.district_id districtId,
+        c.dict_name provinceName,
+        d.dict_name cityName,
+        e.dict_name districtName,
+        a.is_deleted,
+        a.create_user,
+        a.create_time,
+        a.update_time,
+        a.last_modified_by,
+        a.version
+        from t_sys_user a,
+             t_driver b,
+             t_dict c,
+             t_dict d,
+             t_dict e
+        where a.user_code = #{driverCode}
+        and b.driver_code = #{driverCode}
+        and b.province_id = c.dict_id
+        and b.city_id = d.dict_id
+        and b.district_id = e.dict_id
+        and a.is_deleted = 0
+    </select>
+
+    <!--修改司机用户表信息-->
+    <update id="updateUser" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+        update t_sys_user
+        set
+         user_name = #{driverName},
+         user_phone = #{driverPhone},
+         user_idcard = #{driverIdCard},
+         user_acct = #{driverAcct},
+         user_password = #{driverPassword},
+         update_time = now(),
+         last_modified_by  = #{lastModifiedBy},
+         version = version + 1
+         where user_code = #{driverCode}
+          and version = #{version}
+    </update>
+
+    <!--修改司机司机表信息-->
+    <update id="updateDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+        update t_driver
+        set
+         province_id = #{provinceId},
+         city_id = #{cityId},
+         district_id = #{districtId},
+         update_time = now(),
+         last_modified_by  = #{lastModifiedBy},
+         version = version + 1
+         where driver_code = #{driverCode}
+          and version = #{version}
+    </update>
+
+    <!--司机列表-->
+    <select id="listDriver" parameterType="com.xzsd.pc.driver.entity.DriverList" resultType="com.xzsd.pc.driver.entity.DriverList">
+        select
+        a.user_code driverCode,
+        a.user_name driverName,
+        a.user_phone driverPhone,
+        a.user_idcard driverIdCard,
+        a.user_acct driverAcct,
+        a.version version
+        from t_sys_user a,
+               t_driver b
+        where a.is_deleted = 0
+        and a.user_code = b.driver_code
+        <if test="driverCode != null and driverCode != ''">
+            and a.user_code like concat('%', #{driverCode}, '%')
+        </if>
+        <if test="driverName != null and driverName != ''">
+            and a.user_name like concat('%', #{driverName}, '%')
+        </if>
+        <if test="provinceId != null and provinceId != ''">
+            and b.province_id = #{provinceId}
+        </if>
+        <if test="cityId != null and cityId != ''">
+            and b.city_id = #{cityId}
+        </if>
+        <if test="districtId != null and districtId != ''">
+            and b.district_id = #{districtId}
+        </if>
+        order by a.create_user desc
+    </select>
+
+    <!--删除司机用户表-->
+    <update id="deleteUser" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+        update t_sys_user
+        set
+        is_deleted = 1,
+        update_time = now(),
+        last_modified_by   = #{userId},
+        version = version + 1
+        where user_code in
+        <foreach item="driverCode" index="index" collection="listCode" open="(" separator="," close=")">
+            #{driverCode}
+        </foreach>
+    </update>
+
+    <!--删除司机表-->
+    <update id="deleteDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+        update t_driver
+        set
+        is_deleted = 1,
+        update_time = now(),
+        last_modified_by   = #{userId},
+        version = version + 1
+        where driver_code in
+        <foreach item="driverCode" index="index" collection="listCode" open="(" separator="," close=")">
+            #{driverCode}
+        </foreach>
+    </update>
+
+
+</mapper>

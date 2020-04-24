@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.xzsd.app.personal.dao.PersonalDao">
+
+    <!--登录用户详情-->
+    <select id="findLoginMes" parameterType="com.xzsd.app.personal.entity.LoginMes" resultType="com.xzsd.app.personal.entity.LoginMes">
+        select
+            user_name   userName,
+            user_head  userImage,
+            user_code  loginCode,
+            user_role  userRole
+        from t_sys_user
+        where user_code = #{userCode}
+        and is_deleted=0
+    </select>
+
+    <!--根据角色查询个人信息-->
+    <select id="findRoleMes" parameterType="com.xzsd.app.personal.entity.PersonalInfo" resultType="com.xzsd.app.personal.entity.PersonalInfo">
+        select
+        a.user_code userCode,
+        a.user_acct userAcct,
+        a.user_name userName,
+        a.user_head userImage,
+        a.user_role userRole
+        <if test="userRole == 4">
+            ,
+            c.store_code storeCode,
+            c.store_name storeName,
+            c.store_address storeAddress
+        </if>
+        <if test="userRole == 3">
+            ,
+            a.user_name driverName,
+            a.user_phone driverPhone
+        </if>
+        <if test="userRole == 2">
+            ,
+            b.store_code storeCode,
+            b.store_name storeName,
+            b.store_address storeAddress,
+            b.invite_code inviteCode
+        </if>
+        from t_sys_user a
+        <if test="userRole == 2">
+            left join t_store b on (a.user_code = b.boss_code and b.is_deleted = 0)
+        </if>
+        <if test="userRole == 3">
+           left join t_driver b on (a.user_code = b.driver_code and b.is_deleted = 0)
+        </if>
+        <if test="userRole == 4">
+            left join t_sys_cust b on (a.user_code = b.cust_code)
+            left join t_store c on ( b.invite_code = c.invite_code)
+        </if>
+        where a.is_deleted = 0 and a.user_code = #{userCode}
+
+    </select>
+
+
+
+
+</mapper>

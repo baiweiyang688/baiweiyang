@@ -1,8 +1,6 @@
-package com.goodsdetails.entity;
+package com.xzsd.app.home.entity;
 
-import com.google.gson.internal.$Gson$Preconditions;
-
-public class GoodsDetailsInfo {
+public class GoodsList {
     /**
      * 当前用户编号
      */
@@ -52,18 +50,6 @@ public class GoodsDetailsInfo {
      */
     private String author;
     /**
-     * 绑定的门店编号
-     */
-    private String storeCode;
-    /**
-     * 绑定的门店名称
-     */
-    private String storeName;
-    /**
-     * 绑定的门店地址
-     */
-    private String storeAddress;
-    /**
      * 上架的时间
      */
     private String uploadTime;
@@ -74,14 +60,6 @@ public class GoodsDetailsInfo {
 
     public void setUserCode(String userCode) {
         this.userCode = userCode;
-    }
-
-    public String getUploadTime() {
-        return uploadTime;
-    }
-
-    public void setUploadTime(String uploadTime) {
-        this.uploadTime = uploadTime;
     }
 
     public String getGoodsCode() {
@@ -172,27 +150,11 @@ public class GoodsDetailsInfo {
         this.author = author;
     }
 
-    public String getStoreCode() {
-        return storeCode;
+    public String getUploadTime() {
+        return uploadTime;
     }
 
-    public void setStoreCode(String storeCode) {
-        this.storeCode = storeCode;
-    }
-
-    public String getStoreName() {
-        return storeName;
-    }
-
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
-    }
-
-    public String getStoreAddress() {
-        return storeAddress;
-    }
-
-    public void setStoreAddress(String storeAddress) {
-        this.storeAddress = storeAddress;
+    public void setUploadTime(String uploadTime) {
+        this.uploadTime = uploadTime;
     }
 }

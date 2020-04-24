@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goodsdetails.dao.GoodsDetailsDao">
+
+
+    <!--获取商品详情信息-->
+    <select id="findGoodsDetails" parameterType="com.goodsdetails.entity.GoodsDetailsInfo" resultType="com.goodsdetails.entity.GoodsDetailsInfo">
+        select
+        a.goods_code goodsCode,
+        a.goods_name goodsName,
+        a.goods_introduce goodsIntroduce,
+        a.inventory Inventory,
+        a.cost_price costPrice,
+        a.now_price nowPrice,
+        a.goods_image goodsImage,
+        a.publisher publisher,
+        a.author author,
+        a.store_name storeName,
+        a.goods_sales goodsSales,
+        a.upload_time uploadTime,
+        a.goods_page_view goodsPageView
+        from t_goods a
+        where a.goods_code = #{goodsCode}
+    </select>
+
+
+
+
+
+</mapper>

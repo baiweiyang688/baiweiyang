@@ -1,6 +1,4 @@
-package com.goodsdetails.entity;
-
-import com.google.gson.internal.$Gson$Preconditions;
+package com.xzsd.app.goodsdetails.entity;
 
 public class GoodsDetailsInfo {
     /**

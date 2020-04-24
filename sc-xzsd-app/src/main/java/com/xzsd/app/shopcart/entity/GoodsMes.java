@@ -1,8 +1,6 @@
-package com.goodsdetails.entity;
+package com.xzsd.app.shopcart.entity;
 
-import com.google.gson.internal.$Gson$Preconditions;
-
-public class GoodsDetailsInfo {
+public class GoodsMes {
     /**
      * 当前用户编号
      */
