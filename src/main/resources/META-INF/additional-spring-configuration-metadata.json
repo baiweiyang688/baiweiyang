@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "spring.activemq.jms",
+      "type": "java.lang.String",
+      "description": "Description for spring.activemq.jms."
+    },
+    {
+      "name": "spring.jms.topic-name",
+      "type": "java.lang.String",
+      "description": "Description for spring.jms.topic-name."
+    },
+    {
+      "name": "spring.jms.queue-name",
+      "type": "java.lang.String",
+      "description": "Description for spring.jms.queue-name."
+    }
+  ] }

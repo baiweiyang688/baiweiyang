@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.menu.dao.MenuDao">
+
+    <!--统计菜单-->
+    <select id="countMenuName" resultType="int" >
+        select count(menu_name)
+        from t_menu
+        where menu_name=#{menuName}
+    </select>
+
+    <!--新增菜单-->
+    <insert id="addMenu" parameterType="com.menu.entity.MenuInfo">
+        insert into t_menu
+        (menu_code,
+         menu_name,
+         is_menu,
+         menu_path,
+         comment,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{menuCode},
+            #{menuName},
+            #{isMenu},
+            #{menuPath},
+            #{comment},
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--获取菜单信息-->
+    <select id="findMenu" parameterType="com.menu.entity.MenuMesInfo" resultType="com.menu.entity.MenuMesInfo">
+        select
+        a.menu_name menuName,
+        a.menu_path menuPath,
+        a.comment comment
+        from t_menu a
+        where a.menu_code = #{menuCode}
+        and is_deleted = 0
+    </select>
+
+    <!--菜单列表-->
+    <select id="listMenu" parameterType="com.menu.entity.MenuListInfo" resultType="com.menu.entity.MenuListInfo">
+        select
+        a.menu_name menuName
+        from t_menu a
+        where a.is_deleted = 0
+        order by a.create_user desc
+    </select>
+
+    <!--修改菜单信息-->
+    <update id="updateMenu" parameterType="com.menu.entity.MenuInfo">
+        update t_menu
+        set
+         menu_name = #{menuName},
+         is_menu = #{isMenu},
+         menu_path = #{menuPath},
+         comment = #{comment},
+         update_time = now(),
+         last_modified_by  = #{lastModifiedBy},
+         version = version + 1
+        where menu_code = #{menuCode}
+        and version = #{version}
+    </update>
+
+    <!--删除菜单-->
+    <update id="deleteMenu" parameterType="com.menu.entity.MenuInfo">
+        update t_menu
+        set
+        is_deleted = 1,
+        update_time = now(),
+        last_modified_by   = #{userId},
+        version = version + 1
+        where menu_code in
+        <foreach item="menuCode" index="index" collection="listCode" open="(" separator="," close=")">
+            #{menuCode}
+        </foreach>
+    </update>
+
+
+
+</mapper>

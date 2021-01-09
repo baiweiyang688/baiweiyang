@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.goods.dao.GoodsDao">
+
+    <!--统计商品名字数量-->
+    <select id="countGoodsName" parameterType="com.goods.entity.GoodsInfo"
+            resultType="int">
+        select count(goods_name)
+        from t_goods
+        where is_deleted = 0
+        and goods_name = #{goodsName}
+        <if test="goodsCode != null and goodsCode != ''">
+            and goods_code != #{goodsCode}
+        </if>
+    </select>
+
+    <!--新增商品-->
+    <insert id="addGoods" parameterType="com.goods.entity.GoodsInfo">
+        insert into t_goods
+        (goods_name,
+         goods_code,
+         isbn_book_num,
+         one_level_code,
+         two_level_code,
+         ad_word,
+         goods_introduce,
+         boss_name,
+         inventory,
+         cost_price,
+         now_price,
+         goods_image,
+         publisher,
+         author,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{goodsName},
+            #{goodsCode},
+            #{isbnBookNum},
+            #{oneLevelCode},
+            #{twoLevelCode},
+            #{adWord},
+            #{goodsIntroduce},
+            #{bossName},
+            #{inventory},
+            #{costPrice},
+            #{nowPrice},
+            #{goodsImage},
+            #{publisher},
+            #{author},
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--获取商品信息-->
+    <select id="findGoods" parameterType="com.goods.entity.GoodsInfo" resultType="com.goods.entity.GoodsInfo">
+        select
+        a.goods_code goodsCode,
+        a.goods_name goodsName,
+        a.isbn_book_num isbnBookNum,
+        b.cate_name oneLevelName,
+        c.cate_name twoLevelName,
+        a.ad_word adWord,
+        a.goods_introduce goodsIntruduce,
+        a.boss_name bossName,
+        a.inventory Inventory,
+        a.cost_price costPrice,
+        a.now_price nowPrice,
+        a.goods_image goodsImage,
+        a.publisher publisher,
+        a.author author,
+        a.boss_code bossCode,
+        a.goods_state goodsState,
+        a.goods_sales goodsSales,
+        a.upload_time uploadTime,
+        a.goods_page_view,
+        a.is_deleted,
+        a.create_user,
+        a.create_time,
+        a.update_time,
+        a.last_modified_by,
+        a.version
+        from t_goods a,
+        t_goods_cate b,
+        t_goods_cate c
+        where a.goods_code = #{goodsCode}
+        and is_deleted = 0
+        and a.one_level_code = b.cate_code
+        and a.two_level_code = c.cate_code
+    </select>
+
+    <!--商品列表-->
+    <select id="listGoods" parameterType="com.goods.entity.GoodsInfo" resultType="com.goods.entity.GoodsInfo">
+        select
+        a.goods_code goodsCode,
+        a.goods_name goodsName,
+        a.isbn_book_num isbnBookNum,
+        b.cate_code oneLevelCode,
+        b.cate_name oneLevelName,
+        c.cate_code twoLevelCode,
+        c.cate_name twoLevelName,
+        a.ad_word adWord,
+        a.goods_introduce goodsIntruduce,
+        a.boss_name bossName,
+        a.inventory inventory,
+        a.cost_price costPrice,
+        a.now_price nowPrice,
+        a.goods_image goodsImage,
+        a.publisher publisher,
+        a.author author,
+        a.boss_code bossCode,
+        a.goods_state goodsState,
+        a.is_deleted,
+        a.create_user,
+        a.create_time,
+        a.update_time,
+        a.last_modified_by,
+        a.version
+        from t_goods a,
+        t_goods_cate b,
+        t_goods_cate c
+        where a.is_deleted = 0
+        and a.one_level_code = b.cate_code
+        and a.two_level_code = c.cate_code
+        <if test="goodsName != null and goodsName != ''">
+            and a.goods_name like concat('%', #{goodsName}, '%')
+        </if>
+        <if test="goodsState != null and goodsState != ''">
+            and a.goods_state like concat('%', #{goodsState}, '%')
+        </if>
+        <if test="adWord != null and adWord != ''">
+            and a.ad_word like concat('%', #{adWord}, '%')
+        </if>
+        <if test="publisher != null and publisher != ''">
+            and a.publisher like concat('%', #{publisher}, '%')
+        </if>
+        <if test="author != null and author != ''">
+            and a.author like concat('%', #{author}, '%')
+        </if>
+        order by a.create_user desc
+    </select>
+
+    <!--mq列表-->
+<!--    <insert id="addMessage" parameterType="com.goods.entity.MqInfo">-->
+<!--        insert into t_mq-->
+<!--        (code,-->
+<!--         content,-->
+<!--         create_time-->
+<!--        )-->
+<!--        values-->
+<!--           (#{code},-->
+<!--            #{content},-->
+<!--            now()-->
+<!--             )-->
+<!--    </insert>-->
+
+    <!--修改商品信息-->
+    <update id="updateGoods" parameterType="com.goods.entity.GoodsInfo">
+        update t_goods
+        set
+         goods_name = #{goodsName},
+         isbn_book_num = #{isbnBookNum},
+         one_level_code = #{oneLevelCode},
+         two_level_code = #{twoLevelCode},
+         ad_word = #{adWord},
+         goods_introduce = #{goodsIntroduce},
+         boss_name = #{bossName},
+         inventory = #{inventory},
+         cost_price = #{costPrice},
+         now_price = #{nowPrice},
+         goods_image = #{goodsImage},
+         publisher = #{publisher},
+         author = #author,
+         update_time = now(),
+         last_modified_by  = #{lastModifiedBy},
+         version = version + 1
+         where goods_code = #{goodsCode}
+          and version = #{version}
+    </update>
+
+
+    <!--删除商品-->
+    <update id="deleteGoods" parameterType="com.goods.entity.GoodsInfo">
+    update t_goods
+    set
+    is_deleted = 1,
+    update_time = now(),
+    last_modified_by   = #{userId},
+    version = version + 1
+    where goods_code in
+    <foreach item="goodsCode" index="index" collection="listCode" open="(" separator="," close=")">
+        #{goodsCode}
+    </foreach>
+    </update>
+
+    <!--一级分类-->
+    <select id="oneLevel" parameterType="com.goods.entity.GoodsCate" resultType="com.goods.entity.GoodsCate">
+        select
+            cate_code cateCode,
+            cate_name cateName
+        from t_goods_cate
+        where is_deleted=0
+        and  is_parent=0
+    </select>
+
+    <!--二级分类-->
+    <select id="twoLevel" parameterType="com.goods.entity.GoodsCate" resultType="com.goods.entity.GoodsCate">
+        select
+            cate_code cateCode,
+            cate_name cateName
+        from t_goods_cate
+        where is_deleted=0
+        and  is_parent=1
+        and  cate_parent_code = #{cateCode}
+    </select>
+
+    <!--修改商品状态-->
+    <update id="updateGoodsState" parameterType="com.goods.entity.GoodsInfo">
+        update t_goods
+        set
+        goods_state = #{goodsState},
+        update_time    = now(),
+        last_modified_by   = #{userId},
+        version        = version+1
+        where goods_code in
+        <foreach item="goodsCode" index="index" collection="listCode" open="(" separator="," close=")">
+            #{goodsCode}
+        </foreach>
+    </update>
+
+
+</mapper>
