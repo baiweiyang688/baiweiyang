@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.xzsd.app.boss.dao.BossDao">
+
+    <!--门店负责的司机-->
+    <select id="findDriverMes" parameterType="com.xzsd.app.boss.entity.DriverMes" resultType="com.xzsd.app.boss.entity.DriverMes">
+        select
+            c.user_name  driverName,
+            c.user_phone driverPhone
+        from
+            t_driver a,
+            t_store b,
+            t_sys_user c
+        where b.boss_code = #{userCode}
+        and b.district_id = a.district_id
+        and a.driver_code = c.user_code
+        and c.is_deleted=0
+    </select>
+
+    <!--查询店长订单列表-->
+    <select id="listBossOrder" parameterType="com.xzsd.app.boss.entity.BossOrder" resultMap="ResultMap">
+        select
+        a.order_code,
+        a.order_total_price,
+        a.order_state,
+        a.pay_state,
+        b.user_name,
+        b.user_phone,
+        a.version
+        from
+        t_order a,
+        t_sys_user b
+        where a.store_code in
+        <foreach item="storeCode" index="index" collection="listCode" open="(" separator="," close=")">
+            #{storeCode}
+        </foreach>
+        and a.cust_code = b.user_code
+        and a.is_deleted=0
+        and a.order_state <![CDATA[!= ]]> 2
+        <if test="orderState == 5">
+            and a.order_state in (5,6)
+        </if>
+        <if test="orderState == 3">
+            and a.order_state = 3
+        </if>
+        <if test="payState == 1">
+            and a.pay_state = 1
+        </if>
+        order by a.pay_time desc
+    </select>
+    <resultMap id="ResultMap" type="com.xzsd.app.boss.entity.BossOrder">
+        <id column="order_code" property="orderCode"/>
+        <result column="order_total_price" property="orderTotalPrice"/>
+        <result column="order_state" property="orderState"/>
+        <result column="pay_state" property="payState"/>
+        <result column="user_name" property="custName"/>
+        <result column="user_phone" property="custPhone"/>
+        <result column="version" property="version"/>
+        <collection property="goodsList" ofType="com.xzsd.app.boss.entity.BossOrderInfo" select="orderDetail" column="order_code">
+            <id column="order_details_code" property="order_details_code"/>
+            <result column="goods_code" property="goodsCode"/>
+            <result column="goods_count" property="goodsCount"/>
+            <result column="order_total_price" property="orderTotalPrice"/>
+            <result column="goods_name" property="goodsName"/>
+            <result column="goods_image" property="goodsImage"/>
+            <result column="now_price" property="nowPrice"/>
+            <result column="goods_introduce" property="goodsIntroduce"/>
+        </collection>
+    </resultMap>
+    <select id="orderDetail" parameterType="com.xzsd.app.order.entity.OrderList" resultType="com.xzsd.app.order.entity.OrderListMes">
+        select
+            a.order_details_code orderDetailsCode,
+            a.goods_code  goodsCode,
+            a.goods_count   goodsCount,
+            a.order_total_price  orderTotalPrice,
+            b.goods_name goodsName,
+            b.now_price nowPrice,
+            b.goods_introduce goodsIntroduce,
+            b.goods_image goodsImage
+        from
+            t_order_child a,
+            t_goods b
+        where
+            a.order_code = #{orderCode}
+            and a.goods_code = b.goods_code
+            and a.is_deleted=0
+        order by a.update_time desc
+    </select>
+
+
+    <!--查询订单详情-->
+    <select id="findBossOrder" parameterType="com.xzsd.app.boss.entity.BossList" resultMap="findOrderResultMap">
+        select
+        a.order_code,
+        a.order_total_price,
+        a.order_state,
+        a.pay_state,
+        a.create_time,
+        b.store_name,
+        CONCAT_WS('',d.dict_name,e.dict_name,f.dict_name,b.store_address) AS store_address,
+        c.user_name,
+        c.user_phone
+        from
+        t_order a,
+        t_store b,
+        t_sys_user c,
+        t_dict d,
+        t_dict e,
+        t_dict f
+        where a.order_code = #{orderCode}
+        and a.store_code = b.store_code
+        and a.cust_code = c.user_code
+        and a.is_deleted=0
+        and d.dict_id = b.province_id
+        and e.dict_id = b.city_id
+        and f.dict_id = b.district_id
+    </select>
+    <resultMap id="findOrderResultMap" type="com.xzsd.app.boss.entity.BossList">
+        <id column="order_code" property="orderCode"/>
+        <result column="order_total_price" property="orderTotalPrice"/>
+        <result column="order_state" property="orderState"/>
+        <result column="pay_state" property="payState"/>
+        <result column="create_time" property="createTime"/>
+        <result column="store_name" property="storeName"/>
+        <result column="store_address" property="storeAddress"/>
+        <result column="user_name" property="custName"/>
+        <result column="user_phone" property="custPhone"/>
+        <collection property="goodsList" ofType="com.xzsd.app.boss.entity.BossListMes" select="order" column="order_code">
+            <id column="order_details_code" property="order_details_code"/>
+            <result column="goods_code" property="goodsCode"/>
+            <result column="goods_count" property="goodsCount"/>
+            <result column="order_total_price" property="orderTotalPrice"/>
+            <result column="goods_name" property="goodsName"/>
+            <result column="goods_image" property="goodsImage"/>
+            <result column="now_price" property="nowPrice"/>
+            <result column="goods_introduce" property="goodsIntroduce"/>
+        </collection>
+    </resultMap>
+
+    <select id="order" parameterType="com.xzsd.app.boss.entity.BossList" resultType="com.xzsd.app.boss.entity.BossListMes">
+        select
+            a.order_details_code orderDetailsCode,
+            a.goods_code  goodsCode,
+            a.goods_count   goodsCount,
+            a.order_total_price  orderTotalPrice,
+            b.goods_name goodsName,
+            b.now_price nowPrice,
+            b.goods_introduce goodsIntroduce,
+            b.goods_image goodsImage
+        from
+            t_order_child a,
+            t_goods b
+        where
+            a.order_code = #{orderCode}
+            and a.goods_code = b.goods_code
+            and a.is_deleted=0
+        order by a.update_time desc
+    </select>
+
+
+    <!--店长修改订单状态-->
+    <update id="updateBossOrderState" parameterType="com.xzsd.app.boss.entity.BossUpdate">
+        update t_order
+        set
+           order_state    =   #{orderState},
+           update_time = now(),
+           last_modified_by   = #{userCode},
+           version = version + 1
+        where is_deleted = 0
+        and order_code = #{orderCode}
+        and version = #{version}
+    </update>
+
+
+</mapper>

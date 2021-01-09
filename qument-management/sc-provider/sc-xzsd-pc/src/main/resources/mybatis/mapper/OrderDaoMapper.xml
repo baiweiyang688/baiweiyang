@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.xzsd.pc.order.dao.OrderDao">
+
+    <!--订单列表-->
+    <select id="listOrder" parameterType="com.xzsd.pc.order.entity.OrderList" resultType="com.xzsd.pc.order.entity.OrderList">
+        select
+            a.order_code orderCode,
+            a.order_total_price orderTotalPrice,
+            a.order_state orderState,
+            a.pay_state payState,
+            a.store_code storeCode,
+            b.user_name custName,
+            b.user_phone custPhone,
+            a.pay_time payTime
+        from t_order a
+        left join t_sys_user b on (a.cust_code = b.user_code)
+        where a.is_deleted = 0
+        and a.order_state <![CDATA[!= ]]> 2
+        <if test="custName != null and custName != ''">
+            and b.user_name like concat('%', #{custName}, '%')
+        </if>
+        <if test="orderCode != null and orderCode != ''">
+            and a.order_code like concat('%', #{orderCode}, '%')
+        </if>
+        <if test="custPhone != null and custPhone != ''">
+            and b.user_phone like concat('%', #{custPhone}, '%')
+        </if>
+        <if test="orderState != null and orderState != ''">
+            and a.order_state = #{orderState}
+        </if>
+        <if test="payTimeStart != null and payTimeStart != ''">
+            and a.pay_time &gt;= #{payTimeStart}
+        </if>
+        <if test="payTimeEnd != null and payTimeEnd != ''">
+            and a.pay_time &lt;= #{payTimeEnd}
+        </if>
+        <if test="userRole != null and userRole != '' and userRole == 2">
+            and a.store_code in (select store_code from t_store where boss_code = #{userCode})
+        </if>
+        order by a.create_time desc
+    </select>
+
+
+    <!--订单详情-->
+    <select id="findOrder" parameterType="com.xzsd.pc.order.entity.OrderInfo" resultType="com.xzsd.pc.order.entity.OrderInfo">
+        select
+            a.cust_code custCode,
+            a.order_code orderCode,
+            c.goods_code goodsCode,
+            c.goods_name goodsName,
+            b.goods_count goodsNumber,
+            b.order_total_price orderTotalPrice,
+            c.now_price nowPrice,
+            c.cost_price costPrice
+        from
+            t_order a,
+            t_order_child b,
+            t_goods c
+        where a.order_code=#{orderCode}
+        and b.order_code = #{orderCode}
+        and a.order_code =b.order_code
+        and b.goods_code=c.goods_code
+    </select>
+
+    <!--修改订单状态-->
+    <update id="updateOrderState" parameterType="com.xzsd.pc.order.entity.OrderList">
+        update t_order
+        set
+        order_state = #{orderState},
+        update_time = now(),
+        last_modified_by  = #{userId},
+        version = version + 1
+        where order_code in
+        <foreach item="orderCode" index="index" collection="listCode" open="(" separator="," close=")">
+            #{orderCode}
+        </foreach>
+    </update>
+
+</mapper>

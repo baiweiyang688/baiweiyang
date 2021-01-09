@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.xzsd.app.driver.dao.DriverDao">
+
+        <!--司机负责门店-->
+    <select id="findDriver" parameterType="com.xzsd.app.driver.entity.DriverInfo" resultType="com.xzsd.app.driver.entity.DriverInfo">
+        SELECT
+            c.user_name     bossName,
+            c.user_phone    bossPhone,
+            b.store_name    storeName,
+            b.store_code     storeCode,
+            CONCAT_WS('',d.dict_name,e.dict_name,f.dict_name,b.store_address) AS storeAddress
+        FROM
+            t_driver a,
+            t_store b,
+            t_sys_user c,
+            t_dict d,
+            t_dict e,
+            t_dict f
+        WHERE
+            a.driver_code = #{userCode}
+            and a.district_id = b.district_id
+            and b.boss_code = c.user_code
+            and c.is_deleted =0
+            and d.dict_id = b.province_id
+            and e.dict_id = b.city_id
+            and f.dict_id = b.district_id
+    </select>
+
+
+
+</mapper>

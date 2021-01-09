@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.xzsd.app.order.dao.OrderDao">
+
+    <!--新增订单-->
+    <insert id="addOrder" parameterType="com.xzsd.app.order.entity.OrderInfo">
+        insert into t_order
+        (order_code,
+         cust_code,
+         order_total_price,
+         order_state,
+         store_code,
+         pay_state,
+         pay_time,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{orderCode},
+            #{custCode},
+            #{orderTotalPrice},
+            #{orderState},
+            #{storeCode},
+            #{payState},
+            now(),
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--新增订单详情-->
+    <insert id="addOrderMes" parameterType="com.xzsd.app.order.entity.OrderMes">
+        insert into t_order_child
+        (
+         order_details_code,
+         order_code,
+         goods_code,
+         goods_count,
+         order_total_price,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+        <foreach collection="orderMesList" index="index" item="item" open="" separator="," close="">
+           (#{item.orderDetailsCode},
+            #{item.orderCode},
+            #{item.goodsCode},
+            #{item.goodsCount},
+            #{item.orderTotalPrice},
+            #{item.isDeleted},
+            #{item.createBy},
+            now(),
+            now(),
+            #{item.lastModifiedBy},
+            0)
+        </foreach>
+    </insert>
+
+    <!--更新商品库存和数量-->
+    <update id="updateInventory" parameterType="java.util.List">
+        <foreach collection="orderMesList" index="index" item="item" open="" separator=";" close="">
+            update t_goods set
+            goods_sales = goods_sales + #{item.goodsCount},
+            inventory = inventory - #{item.goodsCount}
+            where goods_code=#{item.goodsCode}
+            and is_deleted=0
+        </foreach>
+    </update>
+
+    <!--更新商品库存和数量订单取消的时候-->
+    <update id="updateInventoryTwo" parameterType="java.util.List">
+        <foreach collection="orderMesList" index="index" item="item" open="" separator=";" close="">
+            update t_goods set
+            goods_sales = goods_sales - #{item.goodsCount},
+            inventory = inventory + #{item.goodsCount}
+            where goods_code=#{item.goodsCode}
+            and is_deleted=0
+        </foreach>
+    </update>
+
+
+    <!--查询订单列表-->
+    <select id="listOrder" parameterType="com.xzsd.app.order.entity.OrderList" resultMap="ResultMap">
+        select
+        order_code,
+        order_total_price,
+        order_state,
+        pay_state,
+        version
+        from
+        t_order
+        where cust_code = #{userCode}
+        and is_deleted=0
+        and order_state <![CDATA[!= ]]> 2
+        <if test="orderState == 5">
+            and order_state in (5,6)
+        </if>
+        <if test="orderState == 3">
+        and order_state = 3
+        </if>
+        <if test="payState == 1">
+        and pay_state = 1
+        </if>
+        order by update_time desc
+    </select>
+
+    <resultMap id="ResultMap" type="com.xzsd.app.order.entity.OrderList">
+        <id column="order_code" property="orderCode"/>
+        <result column="order_total_price" property="orderTotalPrice"/>
+        <result column="order_state" property="orderState"/>
+        <result column="pay_state" property="payState"/>
+        <result column="version" property="version"/>
+        <collection property="goodsList" ofType="com.xzsd.app.order.entity.OrderListMes" select="orderDetail" column="order_code">
+            <id column="order_details_code" property="order_details_code"/>
+            <result column="goods_code" property="goodsCode"/>
+            <result column="goods_count" property="goodsCount"/>
+            <result column="order_total_price" property="orderTotalPrice"/>
+            <result column="goods_name" property="goodsName"/>
+            <result column="goods_image" property="goodsImage"/>
+            <result column="now_price" property="nowPrice"/>
+            <result column="goods_introduce" property="goodsIntroduce"/>
+        </collection>
+    </resultMap>
+
+    <select id="orderDetail" parameterType="com.xzsd.app.order.entity.OrderList" resultType="com.xzsd.app.order.entity.OrderListMes">
+        select
+            a.order_details_code orderDetailsCode,
+            a.goods_code  goodsCode,
+            a.goods_count   goodsCount,
+            a.order_total_price  orderTotalPrice,
+            b.goods_name goodsName,
+            b.now_price nowPrice,
+            b.goods_introduce goodsIntroduce,
+            b.goods_image goodsImage
+        from
+            t_order_child a,
+            t_goods b
+        where
+            a.order_code = #{orderCode}
+            and a.goods_code = b.goods_code
+            and a.is_deleted=0
+        order by a.update_time desc
+    </select>
+
+    <!--查询订单详情-->
+    <select id="findOrder" parameterType="com.xzsd.app.order.entity.OrderSearch" resultMap="findOrderResultMap">
+        select
+        a.order_code,
+        a.order_total_price,
+        a.order_state,
+        a.pay_state,
+        a.create_time,
+        b.store_name,
+        CONCAT_WS('',d.dict_name,e.dict_name,f.dict_name,b.store_address) AS store_address
+        from
+        t_order a,
+        t_store b,
+        t_dict d,
+        t_dict e,
+        t_dict f
+        where a.order_code = #{orderCode}
+        and a.store_code = b.store_code
+        and a.is_deleted=0
+        and d.dict_id = b.province_id
+        and e.dict_id = b.city_id
+        and f.dict_id = b.district_id
+    </select>
+    <resultMap id="findOrderResultMap" type="com.xzsd.app.order.entity.OrderSearch">
+        <id column="order_code" property="orderCode"/>
+        <result column="order_total_price" property="orderTotalPrice"/>
+        <result column="order_state" property="orderState"/>
+        <result column="pay_state" property="payState"/>
+        <result column="create_time" property="createTime"/>
+        <result column="store_name" property="storeName"/>
+        <result column="store_address" property="storeAddress"/>
+        <collection property="goodsList" ofType="com.xzsd.app.order.entity.OrderListMes" select="order" column="order_code">
+            <id column="order_details_code" property="order_details_code"/>
+            <result column="goods_code" property="goodsCode"/>
+            <result column="goods_count" property="goodsCount"/>
+            <result column="order_total_price" property="orderTotalPrice"/>
+            <result column="goods_name" property="goodsName"/>
+            <result column="goods_image" property="goodsImage"/>
+            <result column="now_price" property="nowPrice"/>
+            <result column="goods_introduce" property="goodsIntroduce"/>
+        </collection>
+    </resultMap>
+
+    <select id="order" parameterType="com.xzsd.app.order.entity.OrderSearch" resultType="com.xzsd.app.order.entity.OrderListMes">
+        select
+            a.order_details_code orderDetailsCode,
+            a.goods_code  goodsCode,
+            a.goods_count   goodsCount,
+            a.order_total_price  orderTotalPrice,
+            b.goods_name goodsName,
+            b.now_price nowPrice,
+            b.goods_introduce goodsIntroduce,
+            b.goods_image goodsImage
+        from
+            t_order_child a,
+            t_goods b
+        where
+            a.order_code = #{orderCode}
+            and a.goods_code = b.goods_code
+            and a.is_deleted=0
+        order by a.update_time desc
+    </select>
+
+    <!--客户修改订单状态-->
+    <update id="updateOrderState" parameterType="com.xzsd.app.order.entity.OrderUpdate">
+        update t_order
+        set
+           order_state    =   #{orderState},
+           update_time = now(),
+           last_modified_by   = #{userCode},
+           version = version + 1
+        where is_deleted = 0
+        and order_code = #{orderCode}
+        and version = #{version}
+    </update>
+
+
+    <!--新增订单商品评价-->
+    <insert id="addOrderGoodsEva" parameterType="com.xzsd.app.order.entity.OrderEvaList" >
+        INSERT
+        INTO
+        `t_goods_eva`(
+        `eva_code`,
+        `goods_code`,
+        `cust_code`,
+        `eva_level`,
+        `eva_content`,
+        `eva_time`,
+        `is_deleted`,
+        `version`
+        )
+        VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            (
+            #{item.evaCode},
+            #{item.goodsCode},
+            #{item.custCode},
+            #{item.evaLevel},
+            #{item.evaContent},
+            now(),
+            0,
+            0
+            )
+        </foreach>
+    </insert>
+
+    <select id="findVersion" parameterType="com.xzsd.app.order.entity.OrderVersion" resultType="com.xzsd.app.order.entity.OrderVersion">
+        select
+            a.version version
+        from
+            t_order a
+        where
+            a.order_code = #{orderCode}
+            and a.is_deleted = 0
+    </select>
+
+    <!--更新每种商品星级数-->
+    <update id="updateGoodLevel" parameterType="java.util.List">
+        <foreach collection="listLevel" index="index" item="item" open="" separator=";" close="">
+            update
+            t_goods
+            set
+            eva_level = (select round(avg(eva_level),1) from t_goods_eva where is_deleted = 0 and goods_code = #{item.goodsCode})
+            where
+            goods_code = #{item.goodsCode}
+        </foreach>
+    </update>
+
+    <select id="orderGoodsList" parameterType="com.xzsd.app.order.entity.OrderGoodsList" resultType="com.xzsd.app.order.entity.OrderGoodsList">
+        select
+            b.goods_code goodsCode,
+            b.goods_image goodsImage,
+            b.goods_name goodsName,
+            b.now_price nowPrice,
+            b.eva_level evaLevel,
+            a.create_time createTime
+        from
+            t_order_child a
+            left join t_goods b on (a.goods_code = b.goods_code)
+        where
+            a.order_code = #{orderCode}
+    </select>
+
+
+
+
+
+
+</mapper>

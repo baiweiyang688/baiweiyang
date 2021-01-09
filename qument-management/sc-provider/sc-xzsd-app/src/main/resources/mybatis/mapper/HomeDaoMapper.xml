@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.xzsd.app.home.dao.HomeDao">
+    <!--统计邀请码是否为店家邀请码-->
+    <select id="countInviteCode" parameterType="com.xzsd.app.home.entity.RegisterInfo"
+            resultType="int">
+        select count(invite_code)
+        from t_store
+        where is_deleted = 0
+        and invite_code = #{inviteCode}
+    </select>
+
+    <!--统计用户账号数量-->
+    <select id="countUserAcct" parameterType="com.xzsd.app.home.entity.RegisterInfo"
+            resultType="int">
+        select count(user_acct)
+        from t_sys_user
+        where is_deleted = 0
+        and user_acct = #{userAcct}
+        <if test="userCode != null and userCode != ''">
+            and user_code != #{userCode}
+        </if>
+    </select>
+
+    <!--统计用户手机号数量-->
+    <select id="countUserPhone" parameterType="com.xzsd.app.home.entity.RegisterInfo"
+            resultType="int">
+        select count(user_phone)
+        from t_sys_user
+        where is_deleted = 0
+        and user_phone = #{userPhone}
+        <if test="userCode != null and userCode != ''">
+            and user_code != #{userCode}
+        </if>
+    </select>
+
+    <!--新增用户到用户表-->
+    <insert id="registerUser" parameterType="com.xzsd.app.home.entity.RegisterInfo">
+        insert into t_sys_user
+        (user_code,
+         user_head,
+         user_name,
+         user_acct,
+         user_password,
+         user_sex,
+         user_phone,
+         user_mail,
+         user_idcard,
+         user_role,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{userCode},
+            #{userImage},
+            #{userName},
+            #{userAcct},
+            #{userPassword},
+            #{userSex},
+            #{userPhone},
+            #{userEmail},
+            #{userIdCard},
+            #{userRole},
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--新增用户到客户表-->
+    <insert id="registerCust" parameterType="com.xzsd.app.home.entity.RegisterInfo">
+        insert into t_sys_cust
+        (cust_code,
+         invite_code,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{userCode},
+            #{inviteCode},
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--获取轮播图列表-->
+    <select id="listViewPage" parameterType="com.xzsd.app.home.entity.ViewPageAppInfo" resultType="com.xzsd.app.home.entity.ViewPageAppInfo">
+        select
+        a.viewpage_code viewPageCode,
+        a.viewpage_path viewPagePath,
+        a.viewpage_num viewPageNum,
+        a.goods_code goodsCode,
+        b.goods_name goodsName
+        from t_viewpage a,
+            t_goods b
+        where a.is_deleted = 0
+        and a.viewpage_state = 1
+        and a.goods_code = b.goods_code
+        and a.start_time &lt;= now()
+        and a.end_time &gt;= now()
+        order by a.viewpage_num asc
+    </select>
+
+    <!--获取热门商品列表-->
+    <select id="listHotGoods" parameterType="com.xzsd.app.home.entity.HotGoodsAppInfo" resultType="com.xzsd.app.home.entity.HotGoodsAppInfo">
+        select
+        a.hot_goods_code hotGoodsCode,
+        a.hot_sort hotSort,
+        a.goods_code goodsCode,
+        b.goods_name goodsName,
+        b.now_price nowPrice,
+        b.cost_price costPrice,
+        b.goods_image goodsImage
+        from t_hot_goods a,
+             t_goods b
+        where a.is_deleted = 0
+        and b.is_deleted = 0
+        and b.goods_state = 1
+        and a.goods_code = b.goods_code
+        order by a.hot_sort asc
+        LIMIT 0,#{showNumber}
+    </select>
+
+    <!--一级分类-->
+    <select id="oneLevel" parameterType="com.xzsd.app.home.entity.OneLevel" resultType="com.xzsd.app.home.entity.OneLevel">
+        select
+            cate_code oneLevelCode,
+            cate_name oneLevelName
+        from t_goods_cate
+        where is_deleted=0
+        and  is_parent=0
+    </select>
+
+    <!--二级分类-->
+    <select id="twoLevel" parameterType="String" resultMap="ResultMap">
+    SELECT
+        a.cate_code,
+        a.cate_name,
+        b.goods_code,
+        b.goods_name,
+        b.cost_price,
+        b.now_price,
+        b.goods_image
+    FROM
+     t_goods_cate a left join
+     t_goods b on  (a.cate_code = b.two_level_code and b.is_deleted = 0 and b.goods_state = 1)
+    WHERE
+     a.is_deleted = 0
+ and a.is_parent =1
+ and a.cate_parent_code = #{cateParentCode}
+</select>
+    <resultMap id="ResultMap" type="com.xzsd.app.home.entity.TwoLevel">
+        <id column="cate_code" property="twoLevelCode"/>
+        <result column="cate_name" property="twoLevelName"/>
+        <collection property="goodsList" ofType="com.xzsd.app.home.entity.GoodsList">
+            <id column="goods_code" property="goodsCode"/>
+            <result column="goods_name" property="goodsName"/>
+            <result column="cost_price" property="costPrice"/>
+            <result column="now_price" property="nowPrice"/>
+            <result column="goods_image" property="goodsImage"/>
+        </collection>
+    </resultMap>
+
+
+
+
+
+
+    <!--查询展示数量-->
+    <select id="findShowNumber" parameterType="com.xzsd.app.home.entity.HotGoodsShow" resultType="com.xzsd.app.home.entity.HotGoodsShow">
+        select
+        show_number showNumber
+        from t_show_number
+        where is_deleted=0
+    </select>
+
+
+
+
+
+</mapper>

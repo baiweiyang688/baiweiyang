@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.xzsd.pc.viewpage.dao.ViewPageDao">
+    <!--新增轮播图-->
+    <insert id="addViewPage" parameterType="com.xzsd.pc.viewpage.entity.ViewPageInfo">
+        insert into t_viewpage
+        (viewpage_code,
+         viewpage_state,
+         viewpage_num,
+         viewpage_path,
+         start_time,
+         end_time,
+         goods_Code,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{viewPageCode},
+            #{viewPageState},
+            #{viewPageNum},
+            #{viewPagePath},
+            #{startTime},
+            #{endTime},
+            #{goodsCode},
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--启用、禁用轮播图-->
+    <update id="updateViewPageState" parameterType="com.xzsd.pc.viewpage.entity.ViewPageInfo">
+        update t_viewpage
+        set
+        viewpage_state = #{viewPageState},
+        update_time = now(),
+        last_modified_by  = #{userId},
+        version = version + 1
+        where viewpage_code in
+        <foreach item="viewPageCode" index="index" collection="listCode" open="(" separator="," close=")">
+            #{viewPageCode}
+        </foreach>
+    </update>
+
+    <!--获取轮播图状态-->
+    <select id="getViewPageState" parameterType="com.xzsd.pc.viewpage.entity.ViewPageInfo" resultType="com.xzsd.pc.viewpage.entity.ViewPageInfo">
+        select
+        a.viewpage_state viewPageState
+        from t_viewpage a
+        where a.viewpage_code = #{viewPageCode}
+        and version = #{version}
+    </select>
+
+    <!--轮播图列表-->
+    <select id="listViewPage" parameterType="com.xzsd.pc.viewpage.entity.ViewPageInfo" resultType="com.xzsd.pc.viewpage.entity.ViewPageInfo">
+        select
+        a.viewpage_code viewPageCode,
+        a.viewpage_state viewPageState,
+        a.viewpage_path viewPagePath,
+        a.viewpage_num viewPageNum,
+        a.start_time startTime,
+        a.end_time endTime,
+        a.is_deleted,
+        a.create_user,
+        a.create_time,
+        a.update_time,
+        a.last_modified_by,
+        a.version
+        from t_viewpage a
+        where a.is_deleted = 0
+        <if test="viewPageState != null and viewPageState != ''">
+            and a.viewpage_state = #{viewPageState}
+        </if>
+        order by a.viewpage_num asc
+    </select>
+
+    <!--删除轮播图-->
+    <update id="deleteViewPage" parameterType="com.xzsd.pc.viewpage.entity.ViewPageInfo">
+        update t_viewpage
+        set
+        is_deleted = 1,
+        update_time = now(),
+        last_modified_by   = #{userId},
+        version = version + 1
+        where viewpage_code in
+        <foreach item="viewPageCode" index="index" collection="listViewPage" open="(" separator="," close=")">
+            #{viewPageCode}
+        </foreach>
+    </update>
+
+    <!--商品列表-->
+    <select id="listGoods" parameterType="com.xzsd.pc.viewpage.entity.GoodsViewPageInfo" resultType="com.xzsd.pc.viewpage.entity.GoodsViewPageInfo">
+        select
+        a.goods_code goodsCode,
+        a.goods_name goodsName,
+        a.goods_state goodsState,
+        b.cate_name oneLevelName,
+        c.cate_name twoLevelName
+        from t_goods a,
+        t_goods_cate b,
+        t_goods_cate c
+        where a.is_deleted = 0
+        and a.goods_state = 1
+        and a.one_level_code = b.cate_code
+        and a.two_level_code = c.cate_code
+        <if test="goodsName != null and goodsName != ''">
+            and a.goods_name like concat('%', #{goodsName}, '%')
+        </if>
+        <if test="goodsCode != null and goodsCode != ''">
+            and a.goods_code like concat('%', #{goodsCode}, '%')
+        </if>
+        order by a.create_time desc
+    </select>
+
+    <!--获取商品信息-->
+    <select id="findGoods" parameterType="com.xzsd.pc.viewpage.entity.GoodsViewPageInfo" resultType="com.xzsd.pc.viewpage.entity.GoodsViewPageInfo">
+        select
+        a.goods_code goodsCode,
+        a.goods_name goodsName,
+        a.goods_state goodsState,
+        a.one_level_name oneLevelName,
+        a.two_level_name twoLevelName
+        from t_goods a
+        where a.goods_code = #{goodsCode}
+        and a.goods_name = #{goodsName}
+        and is_deleted = 0
+    </select>
+
+    <!--轮播图详情-->
+    <select id="findViewPage" parameterType="com.xzsd.pc.viewpage.entity.ViewPageMes" resultType="com.xzsd.pc.viewpage.entity.ViewPageMes">
+        select
+        a.viewpage_code viewPageCode,
+        a.viewpage_state viewPageState,
+        a.viewpage_path viewPagePath,
+        a.viewpage_num viewPageNum,
+        a.start_time startTime,
+        a.end_time endTime,
+        a.is_deleted,
+        a.create_user,
+        a.create_time,
+        a.update_time,
+        a.last_modified_by,
+        a.version
+        from t_viewpage a
+        where a.is_deleted = 0
+        and a.viewpage_code = #{viewPageCode}
+    </select>
+
+    <!--统计轮播图序号是否重复-->
+    <select id="countViewPageNum" parameterType="com.xzsd.pc.viewpage.entity.ViewPageInfo" resultType="int">
+        select count(viewpage_num)
+        from
+            t_viewpage
+        where viewpage_num =#{viewPageNum}
+        and is_deleted=0
+    </select>
+
+</mapper>

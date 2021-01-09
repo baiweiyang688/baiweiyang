@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.xzsd.pc.store.dao.StoreDao">
+    <!--统计门店账号数量-->
+    <select id="countStoreAcct" parameterType="com.xzsd.pc.store.entity.StoreInfo"
+            resultType="int">
+        select count(store_acct)
+        from t_store
+        where is_deleted = 0
+        and store_acct = #{storeAcct}
+        <if test="storeCode != null and storeCode != ''">
+            and store_code != #{storeCode}
+        </if>
+    </select>
+
+    <!--统计门店邀请码-->
+    <select id="countInviteCode" parameterType="com.xzsd.pc.store.entity.StoreInfo"
+            resultType="int">
+        select count(invite_code)
+        from t_store
+        where is_deleted = 0
+        and invite_code = #{inviteCode}
+        <if test="storeCode != null and storeCode != ''">
+            and store_code != #{storeCode}
+        </if>
+    </select>
+
+    <!--统计门店电话-->
+    <select id="countPhone" parameterType="com.xzsd.pc.store.entity.StoreInfo"
+            resultType="int">
+        select count(store_phone)
+        from t_store
+        where is_deleted = 0
+        and store_phone = #{storePhone}
+        <if test="storeCode != null and storeCode != ''">
+            and store_code != #{storeCode}
+        </if>
+    </select>
+
+    <!--统计营业执照编码-->
+    <select id="countLicence" parameterType="com.xzsd.pc.store.entity.StoreInfo"
+            resultType="int">
+        select count(store_licence)
+        from t_store
+        where is_deleted = 0
+        and store_licence = #{storeLicence}
+        <if test="storeCode != null and storeCode != ''">
+            and store_code != #{storeCode}
+        </if>
+    </select>
+
+    <!--新增门店-->
+    <insert id="addStore" parameterType="com.xzsd.pc.store.entity.StoreInfo">
+        insert into t_store
+        (store_code,
+         store_acct,
+         store_name,
+         store_phone,
+         boss_code,
+         boss_name,
+         store_licence,
+         invite_code,
+         province_id,
+         city_id,
+         district_id,
+         store_address,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{storeCode},
+            #{storeAcct},
+            #{storeName},
+            #{storePhone},
+            #{bossCode},
+            #{bossName},
+            #{storeLicence},
+            #{inviteCode},
+            #{provinceId},
+            #{cityId},
+            #{districtId},
+            #{storeAddress},
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--获取门店信息-->
+    <select id="findStore" parameterType="com.xzsd.pc.store.entity.StoreInfo" resultType="com.xzsd.pc.store.entity.StoreInfo">
+        select
+        a.store_code storeCode,
+        a.store_name storeName,
+        a.store_phone storePhone,
+        a.store_address storeAddress,
+        a.boss_code bossCode,
+        b.user_name bossName,
+        a.store_licence storeLicence,
+        a.invite_code inviteCode,
+        a.store_acct storeAcct,
+        a.province_id provinceId,
+        a.city_id cityId,
+        a.district_id districtId,
+        c.dict_name provinceName,
+        d.dict_name cityName,
+        e.dict_name districtName,
+        a.is_deleted,
+        a.create_user,
+        a.create_time,
+        a.update_time,
+        a.last_modified_by,
+        a.version
+        from t_store a,
+             t_sys_user b,
+             t_dict c,
+             t_dict d,
+             t_dict e
+        where a.store_code = #{storeCode}
+        and a.province_id = c.dict_id
+        and a.city_id = d.dict_id
+        and a.district_id = e.dict_id
+        and a.is_deleted = 0
+        and b.is_deleted = 0
+        and a.boss_code = b.user_code
+    </select>
+
+
+    <!--门店列表-->
+    <select id="listStore" parameterType="com.xzsd.pc.store.entity.StoreInfo" resultType="com.xzsd.pc.store.entity.StoreInfo">
+        select
+        a.store_code storeCode,
+        a.store_name storeName,
+        a.store_phone storePhone,
+        a.store_address storeAddress,
+        a.store_licence storeLicence,
+        a.boss_code bossCode,
+        b.user_name bossName,
+        a.invite_code inviteCode,
+        a.store_acct storeAcct,
+        a.province_id provinceId,
+        a.city_id cityId,
+        a.district_id districtId,
+        c.dict_name provinceName,
+        d.dict_name cityName,
+        e.dict_name districtName,
+        a.version version
+        from t_store a,
+            t_sys_user b,
+            t_dict c,
+            t_dict d,
+            t_dict e
+        where a.is_deleted = 0
+        and b.is_deleted = 0
+        and a.boss_code = b.user_code
+        and a.province_id = c.dict_id
+        and a.city_id = d.dict_id
+        and a.district_id = e.dict_id
+        <if test="storeCode != null and storeCode != ''">
+            and a.store_Code like concat('%', #{storeCode}, '%')
+        </if>
+        <if test="storeName != null and storeName != ''">
+            and a.store_name like concat('%', #{storeName}, '%')
+        </if>
+        <if test="bossName != null and bossName != ''">
+            and b.user_name like concat('%', #{bossName}, '%')
+        </if>
+        <if test="provinceId != null and provinceId != ''">
+            and a.province_id = #{provinceId}
+        </if>
+        <if test="cityId != null and cityId != ''">
+            and a.city_id = #{cityId}
+        </if>
+        <if test="districtId != null and districtId != ''">
+            and a.district_id = #{districtId}
+        </if>
+        <if test="userRole != null and userRole != '' and userRole == 2">
+            and a.boss_code = #{userCode}
+        </if>
+        order by a.create_user desc
+    </select>
+
+    <!--修改门店信息-->
+    <update id="updateStore" parameterType="com.xzsd.pc.store.entity.StoreInfo">
+        update t_store
+        set
+         store_name = #{storeName},
+         store_phone = #{storePhone},
+         store_address = #{storeAddress},
+         boss_name = #{bossName},
+         boss_code = #{bossCode},
+         invite_code = #{inviteCode},
+         province_id = #{provinceId},
+         city_id = #{cityId},
+         district_id = #{districtId},
+         store_licence = #{storeLicence},
+         update_time = now(),
+         last_modified_by  = #{lastModifiedBy},
+         version = version + 1
+         where store_code = #{storeCode}
+          and version = #{version}
+    </update>
+
+    <!--删除门店-->
+    <update id="deleteStore" parameterType="com.xzsd.pc.store.entity.StoreInfo">
+        update t_store
+        set
+        is_deleted = 1,
+        update_time = now(),
+        last_modified_by   = #{userId},
+        version = version + 1
+        where store_code in
+        <foreach item="storeCode" index="index" collection="listCode" open="(" separator="," close=")">
+            #{storeCode}
+        </foreach>
+    </update>
+
+
+    <!--省份下拉查询-->
+    <select id="findProvince" parameterType="com.xzsd.pc.store.entity.AddressInfo" resultType="com.xzsd.pc.store.entity.AddressInfo">
+        select
+            dict_id provinceId,
+            dict_name provinceName
+        from t_dict
+        where dict_type = '省'
+    </select>
+
+    <!--市下拉查询-->
+    <select id="findCity" parameterType="com.xzsd.pc.store.entity.AddressInfo" resultType="com.xzsd.pc.store.entity.AddressInfo">
+        select
+            dict_id cityId,
+            dict_name cityName
+        from t_dict
+        where dict_type = '市'
+        and parent_code = #{parentCode}
+    </select>
+
+    <!--区下拉查询-->
+    <select id="findDistrict" parameterType="com.xzsd.pc.store.entity.AddressInfo" resultType="com.xzsd.pc.store.entity.AddressInfo">
+        select
+            dict_id districtId,
+            dict_name districtName
+        from t_dict
+        where dict_type = '区'
+        and parent_code = #{parentCode}
+    </select>
+
+    <!--店长下拉查询-->
+    <select id="findBoss" parameterType="com.xzsd.pc.store.entity.BossInfo" resultType="com.xzsd.pc.store.entity.BossInfo">
+        select
+            user_code bossCode,
+            user_name bossName
+        from t_sys_user
+        where is_deleted = 0
+        and user_role = 2
+        and user_code not in (select boss_code from t_store)
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.xzsd.pc.goodscate.dao.GoodsCateDao">
+    <!--统计父类名称-->
+    <select id="countCateName" resultType="int" >
+        select count(cate_name)
+        from t_goods_cate
+        where cate_name=#{cateName}
+        and is_deleted = 0
+    </select>
+
+    <!--新增商品分类-->
+    <insert id="addGoodsCate" parameterType="com.xzsd.pc.goodscate.entity.GoodsCateInfo">
+        insert into t_goods_cate
+        (
+         cate_code,
+         cate_name,
+         is_parent,
+         comment,
+         cate_parent_code,
+         is_deleted,
+         create_user,
+         create_time,
+         update_time,
+         last_modified_by,
+         version)
+        values
+           (#{cateCode},
+            #{cateName},
+            #{isParent},
+            #{comment},
+            #{cateParentCode},
+            #{isDeleted},
+            #{createBy},
+            now(),
+            now(),
+            #{lastModifiedBy},
+            0)
+    </insert>
+
+    <!--获取分类信息-->
+    <select id="findCate" parameterType="com.xzsd.pc.goodscate.entity.GoodsCateMes" resultType="com.xzsd.pc.goodscate.entity.GoodsCateMes">
+        select
+        a.cate_name cateName,
+        a.comment comment,
+        a.is_parent isParent,
+        a.cate_parent_code cateParentCode,
+        b.cate_name cateParentName,
+        a.is_deleted,
+        a.create_user,
+        a.create_time,
+        a.update_time,
+        a.last_modified_by,
+        a.version version
+        from t_goods_cate a
+        left join  t_goods_cate b on (a.cate_parent_code = b.cate_code)
+        where a.cate_code = #{cateCode}
+    </select>
+
+    <!--修改分类信息-->
+    <update id="updateCate" parameterType="com.xzsd.pc.goodscate.entity.GoodsCateInfo">
+        update t_goods_cate
+        set
+         cate_name = #{cateName},
+         comment = #{comment},
+         is_parent = #{isParent},
+         cate_parent_code = #{cateParentCode},
+         update_time = now(),
+         last_modified_by  = #{lastModifiedBy},
+         version = version + 1
+         where cate_code = #{cateCode}
+          and version = #{version}
+    </update>
+
+    <!--删除分类-->
+    <update id="deleteCate" parameterType="com.xzsd.pc.goodscate.entity.GoodsCateInfo">
+        update t_goods_cate
+        set
+        is_deleted = 1,
+        update_time = now(),
+        last_modified_by   = #{userId},
+        version = version + 1
+        where cate_code in
+        <foreach item="cateCode" index="index" collection="listCode" open="(" separator="," close=")">
+            #{cateCode}
+        </foreach>
+    </update>
+
+
+    <!--查询分类列表-->
+    <select id="listCate"  resultMap="ResultMap">
+    select
+        a.cate_code as cateCodeOne,
+        a.cate_name as cateNameOne,
+        a.version   as oneVersion,
+        b.cate_code as cateCodeTwo,
+        b.cate_name as cateNameTwo,
+        b.version   as twoVersion,
+        a.cate_code as cateCodeOO
+    from
+        t_goods_cate a
+    left join t_goods_cate b on (a.cate_code = b.cate_parent_code and b.is_parent = 1 and b.is_deleted = 0 )
+    where a.is_deleted=0 and a.is_parent = 0
+    </select>
+
+    <resultMap id="ResultMap" type="com.xzsd.pc.goodscate.entity.GoodsCateList">
+        <id column="cateCodeOne" property="cateCode" />
+        <result column="cateNameOne" property="cateName"/>
+        <result column="oneVersion" property="version"/>
+        <collection property="secondList" ofType="com.xzsd.pc.goodscate.entity.GoodsCateList">
+            <id column="cateCodeTwo" property="cateCode"/>
+            <result column="cateNameTwo" property="cateName"/>
+            <result column="twoVersion" property="version"/>
+            <result column="cateCodeOO" property="cateParentCode"/>
+        </collection>
+    </resultMap>
+
+    <!--查询分类列表-->
+    <select id="oneLevel"  resultType="com.xzsd.pc.goodscate.entity.OneLevel">
+      select
+        a.cate_code cateParentCode,
+        a.cate_name cateParentName
+      from
+        t_goods_cate a
+      where a.is_deleted=0
+      and a.is_parent = 0
+    </select>
+
+
+    <!--查询分类列表-->
+    <select id="isSon" parameterType="java.lang.String" resultType="int">
+      select
+        count(cate_parent_code)
+      from
+        t_goods_cate
+      where is_deleted=0
+      and is_parent = 1
+      and cate_parent_code = #{cateCode}
+    </select>
+
+
+
+</mapper>
